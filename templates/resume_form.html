@@ -1,0 +1,295 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card shadow">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0"><i class="fas fa-edit me-2"></i>{% if resume %}Edit Resume{% else %}Create New Resume{% endif %}</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    {{ form.hidden_tag() }}
+                    
+                    <div class="mb-3">
+                        {{ form.title.label(class="form-label") }}
+                        {{ form.title(class="form-control", placeholder="e.g., Software Developer Resume") }}
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.full_name.label(class="form-label") }}
+                            {{ form.full_name(class="form-control", placeholder="John Doe") }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.job_title.label(class="form-label") }}
+                            {{ form.job_title(class="form-control", placeholder="Software Engineer") }}
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            {{ form.email.label(class="form-label") }}
+                            {{ form.email(class="form-control", placeholder="john@example.com") }}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            {{ form.phone.label(class="form-label") }}
+                            {{ form.phone(class="form-control", placeholder="+1 234 567 8900") }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.address.label(class="form-label") }}
+                        {{ form.address(class="form-control", placeholder="City, Country") }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.about.label(class="form-label") }}
+                        {{ form.about(class="form-control", rows="4", placeholder="Experienced and results-driven professional...") }}
+                    </div>
+                    
+                    <div class="mb-3">
+                        {{ form.template.label(class="form-label") }}
+                        {{ form.template(class="form-select") }}
+                    </div>
+                    
+                    <div class="d-grid">
+                        {{ form.submit(class="btn btn-primary btn-lg") }}
+                    </div>
+                </form>
+                
+                {% if resume %}
+                <hr class="my-4">
+                
+                <!-- Work Experience Section -->
+                <div class="mb-4">
+                    <h4><i class="fas fa-briefcase me-2"></i>Work Experience</h4>
+                    
+                    {% if experiences %}
+                        {% for exp in experiences %}
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="mb-1">{{ exp.position }} at {{ exp.company }}</h6>
+                                            <small class="text-muted">{{ exp.start_date }} - {{ exp.end_date }}</small>
+                                            <p class="small mt-2">{{ exp.description }}</p>
+                                        </div>
+                                        <a href="{{ url_for('delete_experience', resume_id=resume.id, exp_index=loop.index0) }}" 
+                                           class="btn btn-sm btn-outline-danger"
+                                           onclick="return confirm('Delete this experience?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="POST" action="{{ url_for('add_experience', resume_id=resume.id) }}" class="mt-3 border p-3 rounded">
+                        <h6>Add New Experience</h6>
+                        <div class="row">
+                            <div class="col-md-4 mb-2">
+                                <input type="text" name="company" class="form-control" placeholder="Company Name" required>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <input type="text" name="position" class="form-control" placeholder="Position" required>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <input type="text" name="start_date" class="form-control" placeholder="Start Date">
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <input type="text" name="end_date" class="form-control" placeholder="End Date">
+                            </div>
+                            <div class="col-12 mb-2">
+                                <textarea name="description" class="form-control" rows="2" placeholder="• Led development of key features&#10;• Improved performance by 30%"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-success">Add Experience</button>
+                    </form>
+                </div>
+                
+                <!-- Education Section -->
+                <div class="mb-4">
+                    <h4><i class="fas fa-graduation-cap me-2"></i>Education</h4>
+                    
+                    {% if educations %}
+                        {% for edu in educations %}
+                            <div class="card mb-2">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6 class="mb-1">{{ edu.degree }} in {{ edu.field }}</h6>
+                                            <small class="text-muted">{{ edu.institution }} - {{ edu.graduation_year }}</small>
+                                            {% if edu.gpa %}
+                                                <br><small>GPA: {{ edu.gpa }}</small>
+                                            {% endif %}
+                                        </div>
+                                        <a href="{{ url_for('delete_education', resume_id=resume.id, edu_index=loop.index0) }}" 
+                                           class="btn btn-sm btn-outline-danger"
+                                           onclick="return confirm('Delete this education?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="POST" action="{{ url_for('add_education', resume_id=resume.id) }}" class="mt-3 border p-3 rounded">
+                        <h6>Add New Education</h6>
+                        <div class="row">
+                            <div class="col-md-3 mb-2">
+                                <input type="text" name="degree" class="form-control" placeholder="Degree" required>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <input type="text" name="field" class="form-control" placeholder="Field of Study" required>
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <input type="text" name="institution" class="form-control" placeholder="Institution" required>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <input type="text" name="graduation_year" class="form-control" placeholder="Year">
+                            </div>
+                            <div class="col-md-1 mb-2">
+                                <input type="text" name="gpa" class="form-control" placeholder="GPA">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-success">Add Education</button>
+                    </form>
+                </div>
+                
+                <!-- Skills Section -->
+                <div class="mb-4">
+                    <h4><i class="fas fa-code me-2"></i>Skills</h4>
+                    
+                    {% if skills %}
+                        <div class="mb-2">
+                            {% for skill in skills %}
+                                <span class="badge bg-primary me-1 mb-1 p-2">
+                                    {{ skill }}
+                                    <a href="{{ url_for('delete_skill', resume_id=resume.id, skill_index=loop.index0) }}" 
+                                       class="text-white ms-2"
+                                       onclick="return confirm('Delete this skill?')">
+                                        <i class="fas fa-times"></i>
+                                    </a>
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <form method="POST" action="{{ url_for('add_skill', resume_id=resume.id) }}" class="mt-3">
+                        <div class="input-group">
+                            <input type="text" name="skill" class="form-control" placeholder="Enter a skill" required>
+                            <button type="submit" class="btn btn-success">Add Skill</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Languages Section -->
+                <div class="mb-4">
+                    <h4><i class="fas fa-language me-2"></i>Languages</h4>
+                    
+                    {% if languages %}
+                        {% for lang in languages %}
+                            <div class="card mb-2">
+                                <div class="card-body py-2">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ lang.language }}</strong> - 
+                                            <span class="badge bg-info">{{ lang.proficiency }}</span>
+                                        </div>
+                                        <a href="{{ url_for('delete_language', resume_id=resume.id, lang_index=loop.index0) }}" 
+                                           class="btn btn-sm btn-outline-danger"
+                                           onclick="return confirm('Delete this language?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="POST" action="{{ url_for('add_language', resume_id=resume.id) }}" class="mt-3 border p-3 rounded">
+                        <h6>Add New Language</h6>
+                        <div class="row">
+                            <div class="col-md-6 mb-2">
+                                <input type="text" name="language" class="form-control" placeholder="Language" required>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <select name="proficiency" class="form-select" required>
+                                    <option value="">Select Level</option>
+                                    <option value="Basic">Basic</option>
+                                    <option value="Intermediate">Intermediate</option>
+                                    <option value="Advanced">Advanced</option>
+                                    <option value="Fluent">Fluent</option>
+                                    <option value="Native">Native</option>
+                                </select>
+                            </div>
+                            <div class="col-md-2 mb-2">
+                                <button type="submit" class="btn btn-success w-100">Add</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Certifications Section -->
+                <div class="mb-4">
+                    <h4><i class="fas fa-certificate me-2"></i>Certifications</h4>
+                    
+                    {% if certifications %}
+                        {% for cert in certifications %}
+                            <div class="card mb-2">
+                                <div class="card-body py-2">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <strong>{{ cert.name }}</strong>
+                                            {% if cert.issuer %}
+                                                <br><small class="text-muted">Issuer: {{ cert.issuer }}</small>
+                                            {% endif %}
+                                            {% if cert.year %}
+                                                <br><small class="text-muted">Year: {{ cert.year }}</small>
+                                            {% endif %}
+                                        </div>
+                                        <a href="{{ url_for('delete_certification', resume_id=resume.id, cert_index=loop.index0) }}" 
+                                           class="btn btn-sm btn-outline-danger"
+                                           onclick="return confirm('Delete this certification?')">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="POST" action="{{ url_for('add_certification', resume_id=resume.id) }}" class="mt-3 border p-3 rounded">
+                        <h6>Add New Certification</h6>
+                        <div class="row">
+                            <div class="col-md-5 mb-2">
+                                <input type="text" name="cert_name" class="form-control" placeholder="Certification Name" required>
+                            </div>
+                            <div class="col-md-4 mb-2">
+                                <input type="text" name="issuer" class="form-control" placeholder="Issuing Organization">
+                            </div>
+                            <div class="col-md-3 mb-2">
+                                <input type="text" name="year" class="form-control" placeholder="Year">
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-success">Add Certification</button>
+                    </form>
+                </div>
+                
+                <div class="mt-4 text-center">
+                    <a href="{{ url_for('view_resume', resume_id=resume.id) }}" class="btn btn-primary">
+                        <i class="fas fa-eye me-1"></i> View My Resume
+                    </a>
+                    <a href="{{ url_for('download_pdf', resume_id=resume.id) }}" class="btn btn-success">
+                        <i class="fas fa-download me-1"></i> Download PDF
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
