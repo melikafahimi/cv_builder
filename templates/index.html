@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div style="background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%); color: white; border-radius: 0 0 30px 30px; margin: -1rem -1rem 2rem -1rem; padding: 4rem 2rem;">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h1 class="display-4 fw-bold mb-4">Create Professional Resumes in Minutes</h1>
+            <p class="lead mb-4">Build stunning, professional resumes with our easy-to-use builder. Choose from multiple templates and land your dream job!</p>
+            {% if not current_user.is_authenticated %}
+                <div class="d-grid gap-2 d-sm-flex">
+                    <a href="{{ url_for('register') }}" class="btn btn-light btn-lg px-4 text-primary">Get Started Free</a>
+                    <a href="{{ url_for('login') }}" class="btn btn-outline-light btn-lg px-4">Sign In</a>
+                </div>
+            {% else %}
+                <a href="{{ url_for('create_resume') }}" class="btn btn-light btn-lg text-primary">Create New Resume</a>
+            {% endif %}
+        </div>
+        <div class="col-md-6 text-center">
+            <i class="fas fa-file-alt fa-8x"></i>
+        </div>
+    </div>
+</div>
+
+<div class="row text-center py-5">
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <i class="fas fa-palette fa-3x text-primary mb-3"></i>
+                <h3 class="h5 mb-3">Beautiful Templates</h3>
+                <p class="card-text">Choose from multiple professionally designed templates</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <i class="fas fa-edit fa-3x text-primary mb-3"></i>
+                <h3 class="h5 mb-3">Easy to Edit</h3>
+                <p class="card-text">Simple form-based interface to add your information</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm">
+            <div class="card-body">
+                <i class="fas fa-download fa-3x text-primary mb-3"></i>
+                <h3 class="h5 mb-3">Download as PDF</h3>
+                <p class="card-text">Save your resume as PDF and share it anywhere</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
