@@ -48,5 +48,5 @@ Before you begin, ensure you have the following installed:
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/resume-builder-pro.git
-cd resume-builder-pro
+git clone https://github.com/melikafahimi/resume-builder.git
+cd resume-builder
