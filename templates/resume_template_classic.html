@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="modern-resume-v2" style="max-width: 1100px; margin: 0 auto; background: white; box-shadow: 0 10px 40px rgba(0,0,0,0.1);">
+    <div style="display: flex; flex-wrap: wrap;">
+        <!-- Sidebar - Dark Background -->
+        <div style="width: 33%; background-color: #2c3e50; color: white; padding: 40px 25px;">
+            
+            <!-- Contact Section -->
+            <div style="margin-bottom: 35px;">
+                <h3 style="font-size: 16px; font-weight: 700; letter-spacing: 2px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(255,255,255,0.3); text-transform: uppercase;">CONTACT</h3>
+                <div>
+                    <p style="margin-bottom: 12px; font-size: 13px; display: flex; align-items: center; gap: 12px;"><i class="fas fa-phone-alt" style="width: 18px;"></i> {{ resume.phone or '+123-456-7890' }}</p>
+                    <p style="margin-bottom: 12px; font-size: 13px; display: flex; align-items: center; gap: 12px;"><i class="fas fa-envelope" style="width: 18px;"></i> {{ resume.email }}</p>
+                    <p style="margin-bottom: 12px; font-size: 13px; display: flex; align-items: center; gap: 12px;"><i class="fas fa-map-marker-alt" style="width: 18px;"></i> {{ resume.address or '123 Anywhere St., Any City' }}</p>
+                </div>
+            </div>
+
+            <!-- Education Section -->
+            <div style="margin-bottom: 35px;">
+                <h3 style="font-size: 16px; font-weight: 700; letter-spacing: 2px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(255,255,255,0.3); text-transform: uppercase;">EDUCATION</h3>
+                {% if educations %}
+                    {% for edu in educations %}
+                    <div style="margin-bottom: 25px;">
+                        <div style="font-size: 12px; color: #bdc3c7; margin-bottom: 5px;">{{ edu.graduation_year or '2029 - 2030' }}</div>
+                        <h4 style="font-size: 15px; font-weight: 700; margin-bottom: 5px; color: white;">{{ edu.institution or 'UNIVERSITY' }}</h4>
+                        <p style="font-size: 13px; color: #bdc3c7; margin-bottom: 3px;">{{ edu.degree }} in {{ edu.field }}</p>
+                        {% if edu.gpa %}
+                        <p style="font-size: 12px; color: #bdc3c7;">GPA: {{ edu.gpa }} / 4.0</p>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="margin-bottom: 25px;">
+                        <div style="font-size: 12px; color: #bdc3c7; margin-bottom: 5px;">2029 - 2030</div>
+                        <h4 style="font-size: 15px; font-weight: 700; margin-bottom: 5px; color: white;">BORCELLE UNIVERSITY</h4>
+                        <p style="font-size: 13px; color: #bdc3c7; margin-bottom: 3px;">Master of Business Management</p>
+                    </div>
+                    <div style="margin-bottom: 25px;">
+                        <div style="font-size: 12px; color: #bdc3c7; margin-bottom: 5px;">2025 - 2029</div>
+                        <h4 style="font-size: 15px; font-weight: 700; margin-bottom: 5px; color: white;">BORCELLE UNIVERSITY</h4>
+                        <p style="font-size: 13px; color: #bdc3c7; margin-bottom: 3px;">Bachelor of Business Management</p>
+                        <p style="font-size: 12px; color: #bdc3c7;">GPA: 3.8 / 4.0</p>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Skills Section -->
+            <div style="margin-bottom: 35px;">
+                <h3 style="font-size: 16px; font-weight: 700; letter-spacing: 2px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(255,255,255,0.3); text-transform: uppercase;">SKILLS</h3>
+                {% if skills %}
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        {% for skill in skills %}
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> {{ skill }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> Project Management</li>
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> Public Relations</li>
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> Teamwork</li>
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> Time Management</li>
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> Leadership</li>
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> Effective Communication</li>
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> Critical Thinking</li>
+                    </ul>
+                {% endif %}
+            </div>
+
+            <!-- Languages Section -->
+            <div style="margin-bottom: 35px;">
+                <h3 style="font-size: 16px; font-weight: 700; letter-spacing: 2px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid rgba(255,255,255,0.3); text-transform: uppercase;">LANGUAGE</h3>
+                {% if languages %}
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        {% for lang in languages %}
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> <strong>{{ lang.language }}:</strong> {{ lang.proficiency }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <ul style="list-style: none; padding: 0; margin: 0;">
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> <strong>English:</strong> Fluent</li>
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> <strong>French:</strong> Fluent</li>
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> <strong>German:</strong> Basics</li>
+                        <li style="margin-bottom: 10px; font-size: 13px; position: relative; padding-left: 18px;"><span style="position: absolute; left: 0;">•</span> <strong>Spanish:</strong> Intermediate</li>
+                    </ul>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div style="width: 67%; background-color: white; padding: 40px 35px;">
+            
+            <!-- Profile Summary -->
+            <div style="margin-bottom: 35px;">
+                <h3 style="font-size: 16px; font-weight: 700; letter-spacing: 2px; color: #2c3e50; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #3498db; text-transform: uppercase;">PROFILE SUMMARY</h3>
+                <p style="line-height: 1.6; color: #555; font-size: 13px; text-align: justify;">{{ resume.about or 'Experienced and results-driven Marketing Manager with a proven track record in developing and executing successful marketing strategies. I am seeking a challenging role where I can contribute my skills in strategic planning, team leadership, and creative problem-solving to achieve business objectives.' }}</p>
+            </div>
+
+            <!-- Work Experience -->
+            <div style="margin-bottom: 35px;">
+                <h3 style="font-size: 16px; font-weight: 700; letter-spacing: 2px; color: #2c3e50; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 2px solid #3498db; text-transform: uppercase;">WORK EXPERIENCE</h3>
+                {% if experiences %}
+                    {% for exp in experiences %}
+                    <div style="margin-bottom: 30px;">
+                        <div style="margin-bottom: 10px;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: #2c3e50; margin-bottom: 3px;">{{ exp.company }}</h4>
+                            <div style="font-size: 13px; color: #3498db; font-weight: 600; font-style: italic;">{{ exp.position }}</div>
+                        </div>
+                        {% if exp.description %}
+                        <div style="font-size: 13px; line-height: 1.6; color: #555;">
+                            {{ exp.description|replace('\n', '<br>')|safe }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div style="margin-bottom: 30px;">
+                        <div style="margin-bottom: 10px;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: #2c3e50; margin-bottom: 3px;">Borcelle Studio</h4>
+                            <div style="font-size: 13px; color: #3498db; font-weight: 600; font-style: italic;">Marketing Manager & Specialist</div>
+                        </div>
+                        <div style="font-size: 13px; line-height: 1.6; color: #555;">
+                            • Led the development and implementation of comprehensive marketing strategies that resulted in a 20% increase in brand visibility and a 15% growth in sales within the first year.<br>
+                            • Successfully launched and managed multiple cross-channel campaigns, including digital marketing, social media, and traditional advertising, resulting in improved customer acquisition and retention rates.
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 30px;">
+                        <div style="margin-bottom: 10px;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: #2c3e50; margin-bottom: 3px;">Fauget Studio</h4>
+                            <div style="font-size: 13px; color: #3498db; font-weight: 600; font-style: italic;">Marketing Manager & Specialist</div>
+                        </div>
+                        <div style="font-size: 13px; line-height: 1.6; color: #555;">
+                            • Conducted market research to identify emerging trends and consumer preferences, providing valuable insights for product development and positioning.<br>
+                            • Oversaw the creation of engaging content for various platforms, collaborating with internal teams and external agencies to ensure brand consistency and relevance.
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 30px;">
+                        <div style="margin-bottom: 10px;">
+                            <h4 style="font-size: 15px; font-weight: 700; color: #2c3e50; margin-bottom: 3px;">Studio Shodwe</h4>
+                            <div style="font-size: 13px; color: #3498db; font-weight: 600; font-style: italic;">Marketing Manager & Specialist</div>
+                        </div>
+                        <div style="font-size: 13px; line-height: 1.6; color: #555;">
+                            • Developed and executed targeted marketing campaigns, resulting in a 25% increase in lead generation.<br>
+                            • Implemented SEO strategies that improved website traffic by 30%, enhancing online visibility and positioning the company.<br>
+                            • Collaborated with sales teams to create effective sales collateral, presentations, and promotional materials.
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
