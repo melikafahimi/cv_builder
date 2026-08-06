@@ -1,0 +1,151 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/**
+ * ───────────────────────────────────────────────
+ * Design Tokens (shadcn/ui + next-themes)
+ * HSL channel values so Tailwind can compose alpha.
+ * ───────────────────────────────────────────────
+ */
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 47.4% 11.2%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 47.4% 11.2%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+
+    --primary: 243 75% 59%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --accent: 243 75% 96%;
+    --accent-foreground: 243 75% 30%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --ring: 243 75% 59%;
+
+    --radius: 0.625rem;
+
+    /* Resume canvas tokens */
+    --resume-bg: 0 0% 100%;
+    --resume-fg: 222.2 47.4% 11.2%;
+    --resume-accent: 243 75% 59%;
+    --resume-muted: 210 40% 96.1%;
+  }
+
+  .dark {
+    --background: 222.2 47.4% 7%;
+    --foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --popover: 222.2 47.4% 7%;
+    --popover-foreground: 210 40% 98%;
+
+    --card: 222.2 47.4% 9%;
+    --card-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+
+    --primary: 243 75% 65%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --accent: 243 75% 20%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --ring: 243 75% 65%;
+
+    --resume-bg: 0 0% 100%;
+    --resume-fg: 222.2 47.4% 11.2%;
+    --resume-accent: 243 75% 59%;
+    --resume-muted: 210 40% 96.1%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Respect reduced motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-track {
+    @apply bg-transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-muted-foreground/30;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-muted-foreground/50;
+  }
+}
+
+@layer components {
+  /**
+   * Resume canvas surface — always renders on a white "paper"
+   * regardless of app theme, so PDF/print output is consistent.
+   */
+  .resume-surface {
+    background-color: hsl(var(--resume-bg));
+    color: hsl(var(--resume-fg));
+  }
+
+  /* Print-only helpers */
+  .print-only {
+    @apply hidden print:block;
+  }
+  .no-print {
+    @apply print:hidden;
+  }
+}
