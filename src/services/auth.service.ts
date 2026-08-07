@@ -58,6 +58,9 @@ export const authService = {
 
   /** Whether a token is present (does not validate it). */
   hasToken(): boolean {
-    return isBrowser() && Boolean(window.localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN))
+    return (
+      isBrowser() &&
+      Boolean(window.localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN))
+    )
   },
 } as const

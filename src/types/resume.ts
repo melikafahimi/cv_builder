@@ -18,32 +18,15 @@ export type SkillLevel = 'beginner' | 'intermediate' | 'advanced' | 'expert'
 
 /** Language proficiency per CEFR-style scale. */
 export type LanguageProficiency =
-  | 'beginner'
-  | 'elementary'
-  | 'intermediate'
-  | 'advanced'
-  | 'fluent'
-  | 'native'
+  'beginner' | 'elementary' | 'intermediate' | 'advanced' | 'fluent' | 'native'
 
 /** Available resume template identifiers. */
 export type TemplateId =
-  | 'modern'
-  | 'classic'
-  | 'creative'
-  | 'professional'
-  | 'executive'
-  | 'safety'
+  'modern' | 'classic' | 'creative' | 'professional' | 'executive' | 'safety'
 
 /** Accent color theme applied to a template. */
 export type AccentColor =
-  | 'blue'
-  | 'indigo'
-  | 'violet'
-  | 'emerald'
-  | 'amber'
-  | 'rose'
-  | 'slate'
-  | 'teal'
+  'blue' | 'indigo' | 'violet' | 'emerald' | 'amber' | 'rose' | 'slate' | 'teal'
 
 /** Font family choices for the resume canvas. */
 export type ResumeFontFamily = 'sans' | 'serif' | 'mono'

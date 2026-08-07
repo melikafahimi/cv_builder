@@ -185,8 +185,18 @@ export function createSampleResume(): Resume {
     summary:
       'Customer and Retail Sales professional with solid understanding of retail dynamics, marketing and customer service. Offering 5 years of experience providing quality product recommendations and solutions to meet customer needs and exceed expectations.',
     skills: [
-      { id: 's1', name: 'Inventory management', level: 'advanced', category: '' },
-      { id: 's2', name: 'Accurate money handling', level: 'advanced', category: '' },
+      {
+        id: 's1',
+        name: 'Inventory management',
+        level: 'advanced',
+        category: '',
+      },
+      {
+        id: 's2',
+        name: 'Accurate money handling',
+        level: 'advanced',
+        category: '',
+      },
       {
         id: 's3',
         name: 'Documentation and record keeping',

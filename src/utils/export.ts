@@ -20,7 +20,9 @@ export interface ExportOptions {
 /** Build a default export options object from a resume. */
 export function buildExportOptions(resume: Resume): ExportOptions {
   return {
-    filename: `${resume.title || 'resume'}.pdf`.replace(/\s+/g, '-').toLowerCase(),
+    filename: `${resume.title || 'resume'}.pdf`
+      .replace(/\s+/g, '-')
+      .toLowerCase(),
     pageSize: resume.style.pageSize,
     margins: resume.style.margins,
     dark: false,
@@ -52,22 +54,25 @@ export async function exportElementToPdf(
   const html2pdf = (await import('html2pdf.js')).default
   const { width, height } = getPageSizePixels(options.pageSize)
 
-  await html2pdf().set({
-    margin: [
-      options.margins.top,
-      options.margins.right,
-      options.margins.bottom,
-      options.margins.left,
-    ],
-    filename: options.filename,
-    image: { type: 'jpeg', quality: 0.98 },
-    html2canvas: { scale: 2, useCORS: true, logging: false },
-    jsPDF: {
-      unit: 'mm',
-      format: options.pageSize,
-      orientation: width > height ? 'landscape' : 'portrait',
-    },
-  }).from(element).save()
+  await html2pdf()
+    .set({
+      margin: [
+        options.margins.top,
+        options.margins.right,
+        options.margins.bottom,
+        options.margins.left,
+      ],
+      filename: options.filename,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true, logging: false },
+      jsPDF: {
+        unit: 'mm',
+        format: options.pageSize,
+        orientation: width > height ? 'landscape' : 'portrait',
+      },
+    })
+    .from(element)
+    .save()
 }
 
 /** Trigger the browser's native print dialog for an element. */

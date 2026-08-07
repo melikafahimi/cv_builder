@@ -136,7 +136,11 @@ export const useEditorStore = create<EditorState>()(
         selectedSection: null,
 
         init: (resume) =>
-          set({ resume: resume ?? createEmptyResume(), isDirty: false }, false, 'init'),
+          set(
+            { resume: resume ?? createEmptyResume(), isDirty: false },
+            false,
+            'init',
+          ),
 
         reset: () =>
           set(
@@ -148,7 +152,11 @@ export const useEditorStore = create<EditorState>()(
         loadSample: () => {
           // Lazy import to avoid circular dependency with constants
           import('@/constants/resume').then(({ createSampleResume }) => {
-            set({ resume: createSampleResume(), isDirty: true }, false, 'loadSample')
+            set(
+              { resume: createSampleResume(), isDirty: true },
+              false,
+              'loadSample',
+            )
           })
         },
 
@@ -189,7 +197,10 @@ export const useEditorStore = create<EditorState>()(
         setAccentColor: (accentColor) =>
           set(
             (s) => ({
-              resume: { ...s.resume, style: { ...s.resume.style, accentColor } },
+              resume: {
+                ...s.resume,
+                style: { ...s.resume.style, accentColor },
+              },
               isDirty: true,
             }),
             false,

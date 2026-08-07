@@ -17,9 +17,7 @@ export default function HomePage() {
       {/* Marketing hero, features, templates, CTA — to be implemented */}
       <div className="flex flex-1 items-center justify-center p-8">
         <div className="text-center">
-          <h1 className="text-4xl font-bold tracking-tight">
-            CV Builder
-          </h1>
+          <h1 className="text-4xl font-bold tracking-tight">CV Builder</h1>
           <p className="mt-4 text-muted-foreground">
             Architecture scaffold — UI coming soon.
           </p>

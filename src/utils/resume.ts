@@ -26,9 +26,7 @@ export function toggleSection(
   sections: SectionConfig[],
   id: SectionId,
 ): SectionConfig[] {
-  return sections.map((s) =>
-    s.id === id ? { ...s, visible: !s.visible } : s,
-  )
+  return sections.map((s) => (s.id === id ? { ...s, visible: !s.visible } : s))
 }
 
 /** Reorder sections by swapping two indices. */

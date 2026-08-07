@@ -1,9 +1,4 @@
-import type {
-  ApiResponse,
-  ApiError,
-  HttpMethod,
-  RequestOptions,
-} from '@/types'
+import type { ApiResponse, ApiError, HttpMethod, RequestOptions } from '@/types'
 import { API_ROUTES, STORAGE_KEYS } from '@/constants'
 import { isBrowser } from '@/utils/storage'
 
@@ -27,10 +22,7 @@ class ApiClient {
 
   private getToken(): string | null {
     if (!isBrowser()) return null
-    return (
-      window.localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) ??
-      null
-    )
+    return window.localStorage.getItem(STORAGE_KEYS.AUTH_TOKEN) ?? null
   }
 
   private async request<T>(
@@ -90,27 +82,15 @@ class ApiClient {
     return this.request<T>('GET', path, undefined, options)
   }
 
-  post<T>(
-    path: string,
-    body?: unknown,
-    options?: RequestOptions,
-  ): Promise<T> {
+  post<T>(path: string, body?: unknown, options?: RequestOptions): Promise<T> {
     return this.request<T>('POST', path, body, options)
   }
 
-  put<T>(
-    path: string,
-    body?: unknown,
-    options?: RequestOptions,
-  ): Promise<T> {
+  put<T>(path: string, body?: unknown, options?: RequestOptions): Promise<T> {
     return this.request<T>('PUT', path, body, options)
   }
 
-  patch<T>(
-    path: string,
-    body?: unknown,
-    options?: RequestOptions,
-  ): Promise<T> {
+  patch<T>(path: string, body?: unknown, options?: RequestOptions): Promise<T> {
     return this.request<T>('PATCH', path, body, options)
   }
 

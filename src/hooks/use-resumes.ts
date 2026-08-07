@@ -26,8 +26,7 @@ import type {
 export const resumeKeys = {
   all: ['resumes'] as const,
   lists: () => [...resumeKeys.all, 'list'] as const,
-  list: (params: PaginationParams) =>
-    [...resumeKeys.lists(), params] as const,
+  list: (params: PaginationParams) => [...resumeKeys.lists(), params] as const,
   details: () => [...resumeKeys.all, 'detail'] as const,
   detail: (id: string) => [...resumeKeys.details(), id] as const,
 }
@@ -83,10 +82,7 @@ export function useUpdateResume() {
     },
     onError: (_err, input, context) => {
       if (context?.previous) {
-        queryClient.setQueryData(
-          resumeKeys.detail(input.id),
-          context.previous,
-        )
+        queryClient.setQueryData(resumeKeys.detail(input.id), context.previous)
       }
     },
     onSettled: (data) => {

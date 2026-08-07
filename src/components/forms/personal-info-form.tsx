@@ -1,69 +1,112 @@
 'use client'
 
 import * as React from 'react'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { personalInfoSchema, type PersonalInfoFormData } from '@/schemas/resume-schema'
 import { useEditorStore } from '@/store/editor-store'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
+import { TextField } from '@/components/editor/form-parts'
 
 /**
  * PersonalInfoForm — edits the `personalInfo` block.
- * Uses React Hook Form + Zod resolver, then pushes
- * validated values into the Zustand editor store on
- * every change for live preview.
+ * Controlled inputs bound directly to the editor store
+ * so the live preview updates on every keystroke.
  */
 export function PersonalInfoForm() {
   const personalInfo = useEditorStore((s) => s.resume.personalInfo)
   const updatePersonalInfo = useEditorStore((s) => s.updatePersonalInfo)
 
-  const { register, handleSubmit } = useForm<PersonalInfoFormData>({
-    resolver: zodResolver(personalInfoSchema),
-    defaultValues: personalInfo,
-    mode: 'onChange',
-  })
-
-  // Live-update the store on every field change.
-  const onChange = handleSubmit((data) => {
-    updatePersonalInfo(data)
-  })
+  const set = (key: keyof typeof personalInfo) => (value: string) =>
+    updatePersonalInfo({ [key]: value })
 
   return (
-    <form onChange={onChange} className="space-y-4">
-      <div className="space-y-2">
-        <Label htmlFor="fullName">Full Name</Label>
-        <Input id="fullName" {...register('fullName')} />
+    <div className="space-y-4">
+      <TextField
+        label="Full Name"
+        value={personalInfo.fullName}
+        onChange={set('fullName')}
+        placeholder="e.g. Laura Müller"
+      />
+      <TextField
+        label="Job Title"
+        value={personalInfo.jobTitle}
+        onChange={set('jobTitle')}
+        placeholder="e.g. Retail Sales Associate"
+      />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <TextField
+          label="Email"
+          type="email"
+          value={personalInfo.email}
+          onChange={set('email')}
+          placeholder="you@example.com"
+        />
+        <TextField
+          label="Phone"
+          value={personalInfo.phone}
+          onChange={set('phone')}
+          placeholder="+1 555 000 0000"
+        />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="jobTitle">Job Title</Label>
-        <Input id="jobTitle" {...register('jobTitle')} />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <TextField
+          label="City"
+          value={personalInfo.city}
+          onChange={set('city')}
+          placeholder="City"
+        />
+        <TextField
+          label="Country"
+          value={personalInfo.country}
+          onChange={set('country')}
+          placeholder="Country"
+        />
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" {...register('email')} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="phone">Phone</Label>
-          <Input id="phone" {...register('phone')} />
-        </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <TextField
+          label="Address"
+          value={personalInfo.address}
+          onChange={set('address')}
+          placeholder="Street address"
+        />
+        <TextField
+          label="Postal Code"
+          value={personalInfo.postalCode}
+          onChange={set('postalCode')}
+          placeholder="Postal code"
+        />
       </div>
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label htmlFor="city">City</Label>
-          <Input id="city" {...register('city')} />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="country">Country</Label>
-          <Input id="country" {...register('country')} />
-        </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <TextField
+          label="State / Region"
+          value={personalInfo.state}
+          onChange={set('state')}
+          placeholder="State"
+        />
+        <TextField
+          label="Photo URL"
+          value={personalInfo.photo}
+          onChange={set('photo')}
+          placeholder="https://…"
+        />
       </div>
-      <div className="space-y-2">
-        <Label htmlFor="website">Website</Label>
-        <Input id="website" {...register('website')} />
+      <TextField
+        label="Website"
+        value={personalInfo.website}
+        onChange={set('website')}
+        placeholder="https://your-site.com"
+      />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <TextField
+          label="LinkedIn"
+          value={personalInfo.linkedin}
+          onChange={set('linkedin')}
+          placeholder="https://linkedin.com/in/…"
+        />
+        <TextField
+          label="GitHub"
+          value={personalInfo.github}
+          onChange={set('github')}
+          placeholder="https://github.com/…"
+        />
       </div>
-    </form>
+    </div>
   )
 }

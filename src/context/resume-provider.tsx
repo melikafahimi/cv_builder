@@ -30,7 +30,9 @@ export function ResumeProvider({ children }: { children: React.ReactNode }) {
     [resume, isDirty],
   )
 
-  return <ResumeContext.Provider value={value}>{children}</ResumeContext.Provider>
+  return (
+    <ResumeContext.Provider value={value}>{children}</ResumeContext.Provider>
+  )
 }
 
 /** Hook to access the current resume from any child of `<ResumeProvider>`. */

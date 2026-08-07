@@ -14,7 +14,9 @@ export default function RegisterPage() {
   return (
     <div className="space-y-6">
       <div className="text-center">
-        <h1 className="text-2xl font-bold tracking-tight">Create your account</h1>
+        <h1 className="text-2xl font-bold tracking-tight">
+          Create your account
+        </h1>
         <p className="mt-2 text-sm text-muted-foreground">
           Start building professional resumes for free.
         </p>

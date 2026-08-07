@@ -30,9 +30,7 @@ export function validateField(
 ): string | undefined {
   const result = resumeSchema.safeParse(resume)
   if (result.success) return undefined
-  const issue = result.error.issues.find(
-    (i) => i.path.join('.') === path,
-  )
+  const issue = result.error.issues.find((i) => i.path.join('.') === path)
   return issue?.message
 }
 
