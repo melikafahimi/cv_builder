@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ resume.full_name or 'Resume' }}</title>
+    <style>
+        @page { size: A4; margin: 1.2cm; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; background: #f7f7f7; color: #2f3b3f; }
+        .resume-page { max-width: 1000px; margin: 0 auto; background: white; padding: 30px 36px; box-shadow: 0 0 12px rgba(0,0,0,0.08); }
+        .header { border-left: 8px solid #2e7d32; padding-left: 16px; margin-bottom: 20px; }
+        .name { font-size: 30px; font-weight: 700; margin: 0; color: #1b5e20; }
+        .title { font-size: 16px; color: #5e5e5e; margin-top: 6px; }
+        .contact { font-size: 12px; color: #555; margin-top: 10px; line-height: 1.6; }
+        .section { margin-bottom: 16px; page-break-inside: avoid; break-inside: avoid; }
+        .section-title { font-size: 14px; font-weight: 700; text-transform: uppercase; color: #1b5e20; border-bottom: 1px solid #d9e2dd; padding-bottom: 6px; margin-bottom: 8px; }
+        .content { font-size: 13px; line-height: 1.6; }
+        .entry { margin-bottom: 10px; page-break-inside: avoid; break-inside: avoid; }
+        .entry strong { color: #1b5e20; }
+        .pill { display: inline-block; background: #eef7ee; color: #1b5e20; padding: 4px 8px; border-radius: 999px; margin: 3px 6px 3px 0; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="resume-page">
+        <div class="header">
+            <h1 class="name">{{ resume.full_name or 'YOUR NAME' }}</h1>
+            <div class="title">{{ resume.job_title or 'Safety / Operations Professional' }}</div>
+            <div class="contact">
+                {% if resume.email %}<div>{{ resume.email }}</div>{% endif %}
+                {% if resume.phone %}<div>{{ resume.phone }}</div>{% endif %}
+                {% if resume.address %}<div>{{ resume.address }}</div>{% endif %}
+            </div>
+        </div>
+
+        {% if resume.about %}
+        <div class="section">
+            <div class="section-title">Profile Summary</div>
+            <div class="content">{{ resume.about }}</div>
+        </div>
+        {% endif %}
+
+        {% if experiences and experiences|length > 0 %}
+        <div class="section">
+            <div class="section-title">Experience</div>
+            {% for exp in experiences %}
+            <div class="entry"><strong>{{ exp.position or 'Position' }}</strong>{% if exp.company %} — {{ exp.company }}{% endif %}{% if exp.start_date or exp.end_date %}<div style="color:#777; font-size:12px;">{{ exp.start_date or '' }}{% if exp.start_date and exp.end_date %} - {% endif %}{{ exp.end_date or '' }}</div>{% endif %}{% if exp.description %}<div class="content">{{ exp.description }}</div>{% endif %}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if educations and educations|length > 0 %}
+        <div class="section">
+            <div class="section-title">Education</div>
+            {% for edu in educations %}
+            <div class="entry"><strong>{{ edu.degree or 'Degree' }}</strong>{% if edu.institution %} — {{ edu.institution }}{% endif %}</div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if skills and skills|length > 0 %}
+        <div class="section">
+            <div class="section-title">Skills</div>
+            <div class="content">{% for skill in skills %}<span class="pill">{{ skill }}</span>{% endfor %}</div>
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>

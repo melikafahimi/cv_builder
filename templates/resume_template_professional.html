@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>{{ resume.full_name or 'Resume' }}</title>
+    <style>
+        @page { size: A4; margin: 1.2cm; }
+        body { font-family: 'Segoe UI', Arial, sans-serif; margin: 0; color: #243238; background: #f7f7f7; }
+        .resume-page { max-width: 980px; margin: 0 auto; background: white; padding: 28px 36px; box-shadow: 0 0 12px rgba(0,0,0,0.08); }
+        .topbar { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #436456; padding-bottom: 18px; margin-bottom: 22px; }
+        .name { font-size: 28px; font-weight: 700; color: #243238; margin: 0; }
+        .title { font-size: 16px; color: #436456; margin-top: 6px; }
+        .contact { font-size: 12px; color: #555; text-align: right; line-height: 1.6; }
+        .section { margin-bottom: 20px; page-break-inside: avoid; break-inside: avoid; }
+        .section-title { font-size: 15px; font-weight: 700; color: #436456; text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 1px solid #d9e2dd; padding-bottom: 6px; margin-bottom: 10px; }
+        .content { font-size: 13px; line-height: 1.6; color: #334; }
+        .entry { margin-bottom: 10px; page-break-inside: avoid; break-inside: avoid; }
+        .entry strong { color: #243238; }
+        .pill { display: inline-block; background: #eef5f0; color: #436456; padding: 4px 8px; border-radius: 999px; margin: 3px 6px 3px 0; font-size: 12px; }
+        .grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 24px; }
+        ul { margin: 4px 0 0 16px; padding: 0; }
+    </style>
+</head>
+<body>
+    <div class="resume-page">
+        <div class="topbar">
+            <div>
+                <h1 class="name">{{ resume.full_name or 'YOUR NAME' }}</h1>
+                <div class="title">{{ resume.job_title or 'Professional' }}</div>
+            </div>
+            <div class="contact">
+                {% if resume.email %}<div>{{ resume.email }}</div>{% endif %}
+                {% if resume.phone %}<div>{{ resume.phone }}</div>{% endif %}
+                {% if resume.address %}<div>{{ resume.address }}</div>{% endif %}
+            </div>
+        </div>
+
+        {% if resume.about %}
+        <div class="section">
+            <div class="section-title">Profile Summary</div>
+            <div class="content">{{ resume.about }}</div>
+        </div>
+        {% endif %}
+
+        <div class="grid">
+            <div>
+                {% if experiences and experiences|length > 0 %}
+                <div class="section">
+                    <div class="section-title">Experience</div>
+                    {% for exp in experiences %}
+                    <div class="entry">
+                        <strong>{{ exp.position or 'Position' }}</strong>
+                        {% if exp.company %} — {{ exp.company }}{% endif %}
+                        {% if exp.start_date or exp.end_date %}
+                        <div style="color:#777; font-size:12px;">{{ exp.start_date or '' }}{% if exp.start_date and exp.end_date %} - {% endif %}{{ exp.end_date or '' }}</div>
+                        {% endif %}
+                        {% if exp.description %}<div class="content">{{ exp.description }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                {% if educations and educations|length > 0 %}
+                <div class="section">
+                    <div class="section-title">Education</div>
+                    {% for edu in educations %}
+                    <div class="entry">
+                        <strong>{{ edu.degree or 'Degree' }}</strong>
+                        {% if edu.institution %}<div>{{ edu.institution }}</div>{% endif %}
+                        {% if edu.graduation_year %}<div style="color:#777; font-size:12px;">{{ edu.graduation_year }}</div>{% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div>
+                {% if skills and skills|length > 0 %}
+                <div class="section">
+                    <div class="section-title">Skills</div>
+                    <div class="content">
+                        {% for skill in skills %}<span class="pill">{{ skill }}</span>{% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if certifications and certifications|length > 0 %}
+                <div class="section">
+                    <div class="section-title">Certifications</div>
+                    <div class="content">
+                        {% for cert in certifications %}
+                        <div class="entry">
+                            <strong>{{ cert.name or 'Certification' }}</strong>
+                            {% if cert.issuer %}<div>{{ cert.issuer }}</div>{% endif %}
+                            {% if cert.year %}<div style="color:#777; font-size:12px;">{{ cert.year }}</div>{% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                {% if languages and languages|length > 0 %}
+                <div class="section">
+                    <div class="section-title">Languages</div>
+                    <div class="content">
+                        {% for lang in languages %}
+                        <div class="entry"><strong>{{ lang.language or lang.name or 'Language' }}</strong> — {{ lang.proficiency or lang.level or '' }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

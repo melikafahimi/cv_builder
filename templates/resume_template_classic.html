@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ resume.full_name or 'Resume' }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #d1d5db;
+            font-family: 'Times New Roman', 'Georgia', serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+
+        /* کارت اصلی رزومه */
+        .resume-card {
+            max-width: 1000px;
+            width: 100%;
+            background: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            display: grid;
+            grid-template-columns: 34% 66%;
+            overflow: hidden;
+        }
+
+        /* سایدبار چپ (رنگ خاکستری/ماشی) */
+        .left-panel {
+            background-color: #2c3e2f;
+            color: #f5f0e0;
+            padding: 35px 25px;
+        }
+
+        /* عکس پروفایل (دایره با حروف اول) */
+        .avatar-circle {
+            width: 130px;
+            height: 130px;
+            background-color: #b87c4f;
+            border-radius: 50%;
+            margin: 0 auto 25px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .name-left {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            text-align: center;
+        }
+
+        .title-left {
+            font-size: 14px;
+            text-align: center;
+            opacity: 0.8;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .section-left {
+            margin-bottom: 28px;
+        }
+
+        .section-left h3 {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            display: inline-block;
+            padding-bottom: 4px;
+        }
+
+        .contact-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+
+        .edu-left-item {
+            margin-bottom: 18px;
+        }
+
+        .edu-left-item .degree {
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .edu-left-item .school {
+            font-size: 11px;
+            opacity: 0.8;
+            margin: 4px 0 2px;
+        }
+
+        .edu-left-item .date {
+            font-size: 10px;
+            opacity: 0.6;
+        }
+
+        .skill-tag {
+            background: rgba(255,255,255,0.15);
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            margin: 0 5px 8px 0;
+        }
+
+        .cert-item {
+            font-size: 11px;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        /* پنل راست (سفید) */
+        .right-panel {
+            background: white;
+            padding: 35px 30px;
+        }
+
+        .right-section {
+            margin-bottom: 28px;
+        }
+
+        .right-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e2f;
+            border-bottom: 2px solid #c2a15b;
+            display: inline-block;
+            padding-bottom: 4px;
+            margin-bottom: 16px;
+            letter-spacing: 0.5px;
+        }
+
+        .summary-text {
+            font-size: 12.5px;
+            line-height: 1.55;
+            color: #2c2c2c;
+            text-align: justify;
+        }
+
+        .exp-item {
+            margin-bottom: 22px;
+        }
+
+        .exp-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            margin-bottom: 4px;
+        }
+
+        .exp-title {
+            font-weight: 700;
+            font-size: 15px;
+            color: #1f2e1f;
+        }
+
+        .exp-date {
+            font-size: 11px;
+            color: #7c6e4e;
+            font-style: italic;
+        }
+
+        .exp-company {
+            font-weight: 600;
+            font-size: 13px;
+            color: #b87c4f;
+            margin-bottom: 8px;
+        }
+
+        .exp-list {
+            padding-left: 20px;
+        }
+
+        .exp-list li {
+            font-size: 12px;
+            line-height: 1.5;
+            margin-bottom: 5px;
+            color: #2d2d2d;
+        }
+
+        hr {
+            margin: 10px 0;
+            border: 0;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        @media (max-width: 750px) {
+            .resume-card {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="resume-card">
+    <!-- ستون چپ -->
+    <div class="left-panel">
+        <div class="avatar-circle">{{ resume.full_name[:1] if resume.full_name else 'U' }}</div>
+        <div class="name-left">{{ resume.full_name or 'YOUR NAME' }}</div>
+        <div class="title-left">{{ resume.job_title or 'Professional' }}</div>
+
+        <div class="section-left">
+            <h3>CONTACT</h3>
+            {% if resume.phone %}<div class="contact-line">📞 {{ resume.phone }}</div>{% endif %}
+            {% if resume.email %}<div class="contact-line">✉️ {{ resume.email }}</div>{% endif %}
+            {% if resume.address %}<div class="contact-line">📍 {{ resume.address }}</div>{% endif %}
+        </div>
+
+        <div class="section-left">
+            <h3>EDUCATION</h3>
+            {% if educations %}
+                {% for edu in educations %}
+                <div class="edu-left-item">
+                    <div class="degree">{{ edu.degree or 'Degree' }}</div>
+                    {% if edu.field %}<div class="degree">{{ edu.field }}</div>{% endif %}
+                    {% if edu.institution %}<div class="school">{{ edu.institution }}</div>{% endif %}
+                    {% if edu.graduation_year %}<div class="date">{{ edu.graduation_year }}</div>{% endif %}
+                    {% if edu.gpa %}<div class="date">GPA: {{ edu.gpa }}</div>{% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="edu-left-item">
+                    <div class="degree">Bachelor's Degree in Business Administration</div>
+                    <div class="school">Ginyard International Co. University</div>
+                    <div class="date">2016 – 2020</div>
+                </div>
+                <div class="edu-left-item">
+                    <div class="degree">Business Administration on Executive Assistance</div>
+                    <div class="school">Studio Shodwe University</div>
+                    <div class="date">2020 – 2022</div>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="section-left">
+            <h3>SKILLS</h3>
+            <div>
+                {% if skills %}
+                    {% for skill in skills %}
+                    <span class="skill-tag">{{ skill }}</span>
+                    {% endfor %}
+                {% else %}
+                    <span class="skill-tag">Strong organizational and time-management skills</span>
+                    <span class="skill-tag">Exceptional communication and interpersonal skills</span>
+                    <span class="skill-tag">Ability to work independently and as part of a team</span>
+                    <span class="skill-tag">Detail-oriented and able to handle multiple tasks simultaneously</span>
+                    <span class="skill-tag">Experience in managing budgets and handling financial documents</span>
+                {% endif %}
+            </div>
+        </div>
+
+        {% if languages %}
+        <div class="section-left">
+            <h3>LANGUAGES</h3>
+            <div>
+                {% for lang in languages %}
+                <div class="cert-item">• {{ lang.language or lang.name or 'Language' }} — {{ lang.proficiency or lang.level or '' }}</div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="section-left">
+            <h3>CERTIFICATIONS</h3>
+            {% if certifications %}
+                {% for cert in certifications %}
+                <div class="cert-item">• {{ cert.name }}{% if cert.issuer %} — {{ cert.issuer }}{% endif %}{% if cert.year %} ({{ cert.year }}){% endif %}</div>
+                {% endfor %}
+            {% else %}
+                <div class="cert-item">• Executive Secretary and Business Administration Certification</div>
+                <div class="cert-item">• Advanced Executive Assistant and Office Manager Diploma</div>
+                <div class="cert-item">• Executive Office Professional Certificate Program</div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- ستون راست -->
+    <div class="right-panel">
+        <div class="right-section">
+            <h3>SUMMARY</h3>
+            <div class="summary-text">
+                {{ resume.about or 'Highly motivated and professional professional with extensive experience providing high-level support. Proficient in managing calendars, organizing meetings and events, handling confidential documents, and communicating with internal and external stakeholders. Possess exceptional communication and interpersonal skills with a proven ability to work independently and as part of a team.' }}
+            </div>
+        </div>
+
+        <div class="right-section">
+            <h3>PROFESSIONAL EXPERIENCE</h3>
+
+            {% if experiences %}
+                {% for exp in experiences %}
+                <div class="exp-item">
+                    <div class="exp-header">
+                        <span class="exp-title">{{ exp.position or 'Position' }}</span>
+                        {% if exp.start_date or exp.end_date %}
+                        <span class="exp-date">{{ exp.start_date or '' }}{% if exp.start_date and exp.end_date %} – {% endif %}{{ exp.end_date or '' }}</span>
+                        {% endif %}
+                    </div>
+                    {% if exp.company %}<div class="exp-company">{{ exp.company }}</div>{% endif %}
+                    {% if exp.description %}
+                    <ul class="exp-list">
+                        {% for line in exp.description.split('\n') if line.strip() %}
+                            <li>{{ line }}</li>
+                        {% endfor %}
+                    </ul>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="exp-item">
+                    <div class="exp-header">
+                        <span class="exp-title">Executive Secretary</span>
+                        <span class="exp-date">2018 – Present</span>
+                    </div>
+                    <div class="exp-company">Ingoude Company</div>
+                    <ul class="exp-list">
+                        <li>Manage the schedules and calendars of the CEO and other senior executives</li>
+                        <li>Coordinate and schedule meetings and conferences with internal and external stakeholders</li>
+                        <li>Prepare and distribute meeting agendas, minutes, and other relevant materials</li>
+                        <li>Handle confidential information and documents with discretion and maintain their proper organization</li>
+                    </ul>
+                </div>
+                <div class="exp-item">
+                    <div class="exp-header">
+                        <span class="exp-title">Executive Assistant</span>
+                        <span class="exp-date">2016 – 2018</span>
+                    </div>
+                    <div class="exp-company">Wardiere Inc.</div>
+                    <ul class="exp-list">
+                        <li>Managed calendars, scheduled appointments, and arranged meetings and conferences</li>
+                        <li>Prepared and distributed reports, presentations, and other materials</li>
+                        <li>Handled confidential documents and maintained their proper organization</li>
+                        <li>Coordinated travel arrangements and accommodations for executives and guests</li>
+                    </ul>
+                </div>
+                <div class="exp-item">
+                    <div class="exp-header">
+                        <span class="exp-title">Executive Secretary Intern</span>
+                        <span class="exp-date">2015 – 2016</span>
+                    </div>
+                    <div class="exp-company">Aldenaire & Partners</div>
+                    <ul class="exp-list">
+                        <li>Assisted executive secretary in managing and coordinating schedules, meetings, and travel arrangements for senior executives</li>
+                        <li>Conducted research and prepared reports on various topics related to the company's operations and industry trends</li>
+                        <li>Provided administrative support, including answering phone calls, responding to emails, and preparing correspondence</li>
+                    </ul>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+</html>

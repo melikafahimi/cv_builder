@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Resume Builder Pro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #436456;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .signup-container {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .signup-card {
+            background: #CCCCCC;
+            border-radius: 24px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .signup-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .signup-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .signup-header h2 {
+            font-size: 28px;
+            font-weight: 600;
+            color: #436456;
+            margin-bottom: 8px;
+        }
+
+        .signup-header p {
+            color: #555;
+            font-size: 14px;
+        }
+
+        .signup-header a {
+            color: #436456;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .signup-header a:hover {
+            text-decoration: underline;
+        }
+
+        .name-row {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .name-row .input-group {
+            flex: 1;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: #436456;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #aaa;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: all 0.3s ease;
+            box-sizing: border-box;
+            background: white;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #436456;
+            box-shadow: 0 0 0 3px rgba(67, 100, 86, 0.2);
+        }
+
+        .input-group input[type="file"] {
+            padding: 10px;
+            background: white;
+        }
+
+        .btn-create {
+            width: 100%;
+            background: #436456;
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 40px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 10px;
+        }
+
+        .btn-create:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(67, 100, 86, 0.4);
+            background: #2c3e32;
+        }
+
+        .change-method {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .change-method a {
+            color: #436456;
+            font-size: 13px;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .change-method a:hover {
+            text-decoration: underline;
+        }
+
+        .flash-messages {
+            margin-bottom: 20px;
+        }
+
+        .alert {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .alert-success {
+            background: #436456;
+            color: white;
+            border: none;
+        }
+
+        .alert-danger {
+            background: #c0392b;
+            color: white;
+            border: none;
+        }
+
+        .alert-info {
+            background: #2980b9;
+            color: white;
+            border: none;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #CCCCCC;
+            font-size: 12px;
+        }
+
+        footer a {
+            color: #CCCCCC;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="signup-container">
+            <div class="signup-card">
+                <div class="signup-header">
+                    <h2>Create new account</h2>
+                    <p>Already a member? <a href="{{ url_for('login') }}">Log in</a></p>
+                </div>
+
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        <div class="flash-messages">
+                            {% for category, message in messages %}
+                                <div class="alert alert-{{ category }}">{{ message }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                {% endwith %}
+
+                <form method="POST" action="{{ url_for('register') }}" enctype="multipart/form-data">
+                    <div class="name-row">
+                        <div class="input-group">
+                            <label for="first_name">First name</label>
+                            <input type="text" id="first_name" name="first_name" placeholder="Michal" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="last_name">Last name</label>
+                            <input type="text" id="last_name" name="last_name" placeholder="Maslak" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="michal@example.com" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" placeholder="*********" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="profile_pic">Profile picture (optional)</label>
+                        <input type="file" id="profile_pic" name="profile_pic" accept="image/*">
+                    </div>
+
+                    <button type="submit" class="btn-create">Create account</button>
+
+                    <div class="change-method">
+                        <a href="#">Change method</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <footer>
+            © 2024 Resume Builder Pro. Build your professional resume today!
+        </footer>
+    </div>
+</body>
+</html>

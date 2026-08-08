@@ -1,0 +1,896 @@
+{% extends "base.html" %}
+
+{% block title %}Build Your Resume - Live Preview{% endblock %}
+
+{% block content %}
+<style>
+    .builder-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 30px;
+        min-height: calc(100vh - 150px);
+    }
+    
+    /* فرم سمت چپ */
+    .form-side {
+        background: #CCCCCC;
+        border-radius: 24px;
+        padding: 25px;
+        height: 85vh;
+        overflow-y: auto;
+        position: sticky;
+        top: 20px;
+    }
+    
+    .form-side h2 {
+        color: #436456;
+        border-bottom: 2px solid #436456;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    
+    .form-section {
+        margin-bottom: 25px;
+        padding: 15px;
+        background: rgba(255,255,255,0.5);
+        border-radius: 16px;
+    }
+    
+    .form-section h3 {
+        color: #436456;
+        margin-bottom: 15px;
+        font-size: 18px;
+        border-left: 3px solid #436456;
+        padding-left: 10px;
+    }
+    
+    .input-group {
+        margin-bottom: 15px;
+    }
+    
+    .input-group label {
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        color: #436456;
+        margin-bottom: 5px;
+    }
+    
+    .input-group input, 
+    .input-group textarea, 
+    .input-group select {
+        width: 100%;
+        padding: 10px 14px;
+        border: 1px solid #999;
+        border-radius: 10px;
+        font-size: 14px;
+        background: white;
+    }
+    
+    .input-group input:focus, 
+    .input-group textarea:focus {
+        outline: none;
+        border-color: #436456;
+    }
+    
+    .btn-add {
+        background: #436456;
+        color: white;
+        border: none;
+        padding: 8px 16px;
+        border-radius: 25px;
+        cursor: pointer;
+        font-size: 12px;
+        margin-top: 10px;
+    }
+    
+    .btn-add:hover {
+        background: #2c3e32;
+    }
+    
+    .btn-save-main {
+        background: #2c3e32;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 600;
+        width: 100%;
+        margin-top: 20px;
+    }
+    
+    .btn-save-main:hover {
+        background: #1a2e22;
+    }
+    
+    /* آیتم‌های داینامیک */
+    .experience-item, .education-item {
+        background: white;
+        padding: 12px;
+        border-radius: 10px;
+        margin-bottom: 12px;
+        position: relative;
+    }
+    
+    .remove-item {
+        position: absolute;
+        top: 8px;
+        right: 12px;
+        color: #c0392b;
+        cursor: pointer;
+        font-weight: bold;
+    }
+    
+    .skill-tag, .lang-tag, .cert-tag {
+        background: #436456;
+        color: white;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin: 3px;
+    }
+    
+    .remove-small {
+        cursor: pointer;
+        font-weight: bold;
+    }
+    
+    /* Preview سمت راست */
+    .preview-side {
+        background: #f5f5f5;
+        border-radius: 24px;
+        padding: 20px;
+        height: 85vh;
+        overflow-y: auto;
+        position: sticky;
+        top: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    
+    .preview-side h2 {
+        color: #436456;
+        border-bottom: 2px solid #436456;
+        padding-bottom: 10px;
+        margin-bottom: 20px;
+    }
+    
+    /* قالب رزومه */
+    .resume-preview {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .preview-header {
+        text-align: center;
+        border-bottom: 2px solid #436456;
+        padding-bottom: 15px;
+        margin-bottom: 20px;
+    }
+    
+    .preview-name {
+        font-size: 32px;
+        font-weight: 600;
+        color: #436456;
+        text-transform: uppercase;
+    }
+    
+    .preview-job {
+        font-size: 14px;
+        color: #666;
+        font-style: italic;
+        margin: 5px 0;
+    }
+    
+    .preview-contact {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+        font-size: 12px;
+        color: #555;
+    }
+    
+    .preview-section-title {
+        font-size: 16px;
+        font-weight: 600;
+        color: #436456;
+        border-bottom: 1px solid #CCCCCC;
+        padding-bottom: 5px;
+        margin: 20px 0 10px 0;
+    }
+    
+    .preview-text {
+        font-size: 13px;
+        line-height: 1.5;
+        color: #333;
+    }
+    
+    .preview-skills {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+    
+    .preview-skill {
+        background: #CCCCCC;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        color: #436456;
+    }
+    
+    /* انتخاب قالب */
+    .template-selector {
+        margin-bottom: 20px;
+        padding: 15px;
+        background: rgba(255,255,255,0.7);
+        border-radius: 16px;
+    }
+    .template-selector h3 {
+        color: #436456;
+        margin-bottom: 15px;
+        font-size: 18px;
+        border-left: 3px solid #436456;
+        padding-left: 10px;
+    }
+    .template-cards {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+    }
+    .template-card {
+        border: 2px solid #ddd;
+        border-radius: 12px;
+        padding: 10px 8px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-align: center;
+        background: white;
+    }
+    .template-card:hover {
+        border-color: #436456;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(67,100,86,0.15);
+    }
+    .template-card.selected {
+        border-color: #436456;
+        background: #436456;
+        color: white;
+    }
+    .template-card .template-icon {
+        font-size: 28px;
+        margin-bottom: 5px;
+    }
+    .template-card .template-name {
+        font-size: 12px;
+        font-weight: 600;
+    }
+    .selected-template-badge {
+        display: inline-block;
+        background: #436456;
+        color: white;
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-bottom: 10px;
+    }
+    
+    @media (max-width: 900px) {
+        .builder-container {
+            grid-template-columns: 1fr;
+        }
+        .form-side, .preview-side {
+            position: relative;
+            height: auto;
+        }
+        .template-cards {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+</style>
+
+<div class="builder-container">
+    <!-- سمت چپ: فرم ورود اطلاعات -->
+    <div class="form-side">
+        <h2>📝 Fill Your Information</h2>
+        
+        <!-- آپلود رزومه PDF -->
+        <div style="margin-bottom: 20px; padding: 15px; background: rgba(255,255,255,0.7); border-radius: 16px; border: 2px dashed #436456;">
+            <h3 style="color: #436456; margin-bottom: 10px;">📤 Upload PDF Resume</h3>
+            <p style="font-size: 13px; color: #666; margin-bottom: 10px;">Upload your existing PDF resume and we'll automatically extract the information for you.</p>
+            <input type="file" id="pdfUpload" accept="application/pdf" style="display: none;" onchange="handlePdfSelect()">
+            <button class="btn-add" id="pdfUploadBtn" style="width: 100%;" onclick="document.getElementById('pdfUpload').click()">📎 Choose PDF File</button>
+            <div id="pdfFileName" style="font-size: 12px; color: #436456; margin-top: 8px; display: none;"></div>
+        </div>
+        
+        <!-- انتخاب قالب رزومه -->
+        <div class="template-selector">
+            <h3>🎨 Choose Template</h3>
+            <div class="template-cards">
+                <div class="template-card selected" data-template="classic" onclick="selectTemplate('classic', this)">
+                    <div class="template-icon">📄</div>
+                    <div class="template-name">Classic</div>
+                </div>
+                <div class="template-card" data-template="modern" onclick="selectTemplate('modern', this)">
+                    <div class="template-icon">⚡</div>
+                    <div class="template-name">Modern</div>
+                </div>
+                <div class="template-card" data-template="creative" onclick="selectTemplate('creative', this)">
+                    <div class="template-icon">🎨</div>
+                    <div class="template-name">Creative</div>
+                </div>
+                <div class="template-card" data-template="professional" onclick="selectTemplate('professional', this)">
+                    <div class="template-icon">💼</div>
+                    <div class="template-name">Professional</div>
+                </div>
+                <div class="template-card" data-template="executive" onclick="selectTemplate('executive', this)">
+                    <div class="template-icon">🏆</div>
+                    <div class="template-name">Executive</div>
+                </div>
+                <div class="template-card" data-template="safety" onclick="selectTemplate('safety', this)">
+                    <div class="template-icon">🦺</div>
+                    <div class="template-name">Safety</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- اطلاعات شخصی -->
+        <div class="form-section">
+            <h3>👤 Personal Information</h3>
+            <div class="input-group">
+                <label>Full Name</label>
+                <input type="text" id="fullName" placeholder="John Doe" onkeyup="updatePreview()">
+            </div>
+            <div class="input-group">
+                <label>Job Title</label>
+                <input type="text" id="jobTitle" placeholder="Software Engineer" onkeyup="updatePreview()">
+            </div>
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" id="email" placeholder="john@example.com" onkeyup="updatePreview()">
+            </div>
+            <div class="input-group">
+                <label>Phone</label>
+                <input type="text" id="phone" placeholder="+1 234 567 8900" onkeyup="updatePreview()">
+            </div>
+            <div class="input-group">
+                <label>Address</label>
+                <input type="text" id="address" placeholder="City, Country" onkeyup="updatePreview()">
+            </div>
+            <div class="input-group">
+                <label>Profile Summary</label>
+                <textarea id="summary" rows="4" placeholder="Detail-oriented professional with experience..." onkeyup="updatePreview()"></textarea>
+            </div>
+        </div>
+        
+        <!-- سوابق کاری با فرم مستقیم -->
+        <div class="form-section">
+            <h3>💼 Work Experience</h3>
+            <div id="experiencesList"></div>
+            <button class="btn-add" onclick="showExperienceForm()">+ Add Experience</button>
+        </div>
+        
+        <!-- تحصیلات با فرم مستقیم -->
+        <div class="form-section">
+            <h3>🎓 Education</h3>
+            <div id="educationsList"></div>
+            <button class="btn-add" onclick="showEducationForm()">+ Add Education</button>
+        </div>
+        
+        <!-- مهارت‌ها -->
+        <div class="form-section">
+            <h3>🛠️ Skills</h3>
+            <div class="input-group">
+                <input type="text" id="skillInput" placeholder="e.g., Python, JavaScript" onkeypress="if(event.key===','){event.preventDefault();addSkill()}">
+            </div>
+            <button class="btn-add" onclick="addSkill()">+ Add Skill</button>
+            <div id="skillsList" style="margin-top: 10px;"></div>
+        </div>
+        
+        <!-- زبان‌ها -->
+        <div class="form-section">
+            <h3>🌐 Languages</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <input type="text" id="languageInput" placeholder="Language">
+                <select id="proficiencyInput">
+                    <option value="Native">Native</option>
+                    <option value="Fluent">Fluent</option>
+                    <option value="Advanced">Advanced</option>
+                    <option value="Intermediate">Intermediate</option>
+                    <option value="Basic">Basic</option>
+                </select>
+            </div>
+            <button class="btn-add" onclick="addLanguage()">+ Add Language</button>
+            <div id="languagesList" style="margin-top: 10px;"></div>
+        </div>
+        
+        <!-- گواهینامه‌ها -->
+        <div class="form-section">
+            <h3>📜 Certifications</h3>
+            <div class="input-group">
+                <input type="text" id="certInput" placeholder="Certification Name">
+            </div>
+            <button class="btn-add" onclick="addCertification()">+ Add Certification</button>
+            <div id="certificationsList" style="margin-top: 10px;"></div>
+        </div>
+        
+        <button class="btn-save-main" onclick="saveResume()">💾 Save Resume to Account</button>
+    </div>
+    
+    <!-- سمت راست: نمایش زنده رزومه -->
+    <div class="preview-side">
+        <h2>👁️ Live Preview</h2>
+        <div class="resume-preview" id="resumePreview">
+            <!-- رزومه به صورت زنده اینجا پر میشه -->
+        </div>
+    </div>
+</div>
+
+<!-- مودال فرم تجربیات -->
+<div id="experienceModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:24px; padding:25px; width:90%; max-width:500px;">
+        <h3 style="color:#436456; margin-bottom:20px;">Add Work Experience</h3>
+        <div class="input-group"><label>Company Name</label><input type="text" id="expCompany" class="form-control"></div>
+        <div class="input-group"><label>Position</label><input type="text" id="expPosition" class="form-control"></div>
+        <div class="input-group"><label>Start Date</label><input type="text" id="expStartDate" class="form-control" placeholder="e.g., 2020"></div>
+        <div class="input-group"><label>End Date</label><input type="text" id="expEndDate" class="form-control" placeholder="e.g., 2024"></div>
+        <div class="input-group"><label>Description</label><textarea id="expDescription" rows="3" class="form-control"></textarea></div>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button onclick="confirmAddExperience()" style="background:#436456; color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer;">Add</button>
+            <button onclick="closeExperienceModal()" style="background:#CCCCCC; color:#436456; border:none; padding:10px 20px; border-radius:25px; cursor:pointer;">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- مودال فرم تحصیلات -->
+<div id="educationModal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:24px; padding:25px; width:90%; max-width:500px;">
+        <h3 style="color:#436456; margin-bottom:20px;">Add Education</h3>
+        <div class="input-group"><label>Degree</label><input type="text" id="eduDegree" class="form-control" placeholder="e.g., Bachelor of Science"></div>
+        <div class="input-group"><label>Field of Study</label><input type="text" id="eduField" class="form-control" placeholder="e.g., Computer Science"></div>
+        <div class="input-group"><label>Institution</label><input type="text" id="eduInstitution" class="form-control"></div>
+        <div class="input-group"><label>Graduation Year</label><input type="text" id="eduYear" class="form-control"></div>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button onclick="confirmAddEducation()" style="background:#436456; color:white; border:none; padding:10px 20px; border-radius:25px; cursor:pointer;">Add</button>
+            <button onclick="closeEducationModal()" style="background:#CCCCCC; color:#436456; border:none; padding:10px 20px; border-radius:25px; cursor:pointer;">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // ذخیره اطلاعات در حافظه
+    let experiences = [];
+    let educations = [];
+    let skills = [];
+    let languages = [];
+    let certifications = [];
+    let selectedTemplate = 'classic';
+    
+    // ============= انتخاب قالب =============
+    function selectTemplate(name, element) {
+        selectedTemplate = name;
+        document.querySelectorAll('.template-card').forEach(card => {
+            card.classList.remove('selected');
+        });
+        if (element) {
+            element.classList.add('selected');
+        }
+        updatePreview();
+    }
+    
+    // ============= به‌روزرسانی پیش‌نمایش =============
+    function updatePreview() {
+        const fullName = document.getElementById('fullName').value || 'YOUR NAME';
+        const jobTitle = document.getElementById('jobTitle').value || 'Job Title';
+        const email = document.getElementById('email').value || 'email@example.com';
+        const phone = document.getElementById('phone').value || '';
+        const address = document.getElementById('address').value || '';
+        const summary = document.getElementById('summary').value || 'Professional summary goes here...';
+        
+        const templateNames = {
+            'classic': 'Classic',
+            'modern': 'Modern',
+            'creative': 'Creative',
+            'professional': 'Professional',
+            'executive': 'Executive',
+            'safety': 'Safety'
+        };
+        
+        let html = `
+            <div class="selected-template-badge">🎨 Template: ${templateNames[selectedTemplate] || selectedTemplate}</div>
+            <div class="preview-header">
+                <div class="preview-name">${fullName.toUpperCase()}</div>
+                <div class="preview-job">${jobTitle}</div>
+                <div class="preview-contact">
+                    ${address ? `<span>📍 ${address}</span>` : ''}
+                    <span>📧 ${email}</span>
+                    ${phone ? `<span>📞 ${phone}</span>` : ''}
+                </div>
+            </div>
+            
+            <div>
+                <div class="preview-section-title">PROFILE SUMMARY</div>
+                <p class="preview-text">${summary.replace(/\n/g, '<br>')}</p>
+            </div>
+        `;
+        
+        // تحصیلات
+        if (educations.length > 0) {
+            html += `<div><div class="preview-section-title">EDUCATION</div>`;
+            educations.forEach(edu => {
+                html += `
+                    <div style="margin-bottom: 12px;">
+                        <strong style="color:#436456;">${edu.degree} in ${edu.field}</strong>
+                        <div style="font-size:13px;">${edu.institution}</div>
+                        <div style="font-size:12px; color:#888;">${edu.year}</div>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+        }
+        
+        // مهارت‌ها
+        if (skills.length > 0) {
+            html += `<div><div class="preview-section-title">SKILLS</div>
+                     <div class="preview-skills">`;
+            skills.forEach(skill => {
+                html += `<span class="preview-skill">${skill}</span>`;
+            });
+            html += `</div></div>`;
+        }
+        
+        // سوابق کاری
+        if (experiences.length > 0) {
+            html += `<div><div class="preview-section-title">EXPERIENCE</div>`;
+            experiences.forEach(exp => {
+                html += `
+                    <div style="margin-bottom: 15px;">
+                        <strong style="color:#436456;">${exp.position}</strong>
+                        <div style="font-size:13px;">${exp.company}</div>
+                        <div style="font-size:12px; color:#888;">${exp.startDate} - ${exp.endDate}</div>
+                        <p class="preview-text" style="margin-top:5px;">${exp.description}</p>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+        }
+        
+        // زبان‌ها
+        if (languages.length > 0) {
+            html += `<div><div class="preview-section-title">LANGUAGES</div>
+                     <div class="preview-skills">`;
+            languages.forEach(lang => {
+                html += `<span class="preview-skill">${lang.name} (${lang.level})</span>`;
+            });
+            html += `</div></div>`;
+        }
+        
+        // گواهینامه‌ها
+        if (certifications.length > 0) {
+            html += `<div><div class="preview-section-title">CERTIFICATIONS</div>`;
+            certifications.forEach(cert => {
+                html += `<div style="margin-bottom:5px;">📜 ${cert.name}${cert.issuer ? ' - ' + cert.issuer : ''}${cert.year ? ' (' + cert.year + ')' : ''}</div>`;
+            });
+            html += `</div>`;
+        }
+        
+        // امضا
+        html += `
+            <div style="margin-top: 25px; padding-top: 15px; border-top: 1px solid #ddd;">
+                <div style="font-size:12px; font-style:italic;">I hereby declare that the above information is true to the best of my knowledge.</div>
+                <div style="margin-top: 15px; display:flex; justify-content:space-between;">
+                    <div><strong>Signature:</strong> ${fullName}</div>
+                    <div><strong>Date:</strong> ${new Date().toLocaleDateString()}</div>
+                </div>
+            </div>
+        `;
+        
+        document.getElementById('resumePreview').innerHTML = html;
+    }
+    
+    // ============= مدیریت تجربیات (با مودال) =============
+    function showExperienceForm() {
+        document.getElementById('experienceModal').style.display = 'flex';
+        document.getElementById('expCompany').value = '';
+        document.getElementById('expPosition').value = '';
+        document.getElementById('expStartDate').value = '';
+        document.getElementById('expEndDate').value = '';
+        document.getElementById('expDescription').value = '';
+    }
+    
+    function closeExperienceModal() {
+        document.getElementById('experienceModal').style.display = 'none';
+    }
+    
+    function confirmAddExperience() {
+        const company = document.getElementById('expCompany').value;
+        const position = document.getElementById('expPosition').value;
+        const startDate = document.getElementById('expStartDate').value;
+        const endDate = document.getElementById('expEndDate').value;
+        const description = document.getElementById('expDescription').value;
+        
+        if (!company || !position) {
+            alert('Please fill Company and Position fields!');
+            return;
+        }
+        
+        experiences.push({ company, position, startDate, endDate, description });
+        renderExperiences();
+        updatePreview();
+        closeExperienceModal();
+    }
+    
+    function renderExperiences() {
+        const container = document.getElementById('experiencesList');
+        container.innerHTML = experiences.map((exp, i) => `
+            <div class="experience-item">
+                <strong>${exp.position}</strong> at ${exp.company}<br>
+                <small>${exp.startDate} - ${exp.endDate}</small>
+                <span class="remove-item" onclick="removeExperience(${i})">✖</span>
+                ${exp.description ? `<div style="font-size:12px; margin-top:5px;">${exp.description}</div>` : ''}
+            </div>
+        `).join('');
+    }
+    
+    function removeExperience(index) {
+        experiences.splice(index, 1);
+        renderExperiences();
+        updatePreview();
+    }
+    
+    // ============= مدیریت تحصیلات (با مودال) =============
+    function showEducationForm() {
+        document.getElementById('educationModal').style.display = 'flex';
+        document.getElementById('eduDegree').value = '';
+        document.getElementById('eduField').value = '';
+        document.getElementById('eduInstitution').value = '';
+        document.getElementById('eduYear').value = '';
+    }
+    
+    function closeEducationModal() {
+        document.getElementById('educationModal').style.display = 'none';
+    }
+    
+    function confirmAddEducation() {
+        const degree = document.getElementById('eduDegree').value;
+        const field = document.getElementById('eduField').value;
+        const institution = document.getElementById('eduInstitution').value;
+        const year = document.getElementById('eduYear').value;
+        
+        if (!degree || !institution) {
+            alert('Please fill Degree and Institution fields!');
+            return;
+        }
+        
+        educations.push({ degree, field, institution, year });
+        renderEducations();
+        updatePreview();
+        closeEducationModal();
+    }
+    
+    function renderEducations() {
+        const container = document.getElementById('educationsList');
+        container.innerHTML = educations.map((edu, i) => `
+            <div class="experience-item">
+                <strong>${edu.degree}${edu.field ? ' in ' + edu.field : ''}</strong><br>
+                ${edu.institution} (${edu.year || 'N/A'})
+                <span class="remove-item" onclick="removeEducation(${i})">✖</span>
+            </div>
+        `).join('');
+    }
+    
+    function removeEducation(index) {
+        educations.splice(index, 1);
+        renderEducations();
+        updatePreview();
+    }
+    
+    // ============= مدیریت مهارت‌ها =============
+    function addSkill() {
+        const skill = document.getElementById('skillInput').value.trim();
+        if (skill && !skills.includes(skill)) {
+            skills.push(skill);
+            document.getElementById('skillInput').value = '';
+            renderSkills();
+            updatePreview();
+        }
+    }
+    
+    function renderSkills() {
+        const container = document.getElementById('skillsList');
+        container.innerHTML = skills.map((skill, i) => `
+            <span class="skill-tag">
+                ${skill}
+                <span class="remove-small" onclick="removeSkill(${i})">✖</span>
+            </span>
+        `).join('');
+    }
+    
+    function removeSkill(index) {
+        skills.splice(index, 1);
+        renderSkills();
+        updatePreview();
+    }
+    
+    // ============= مدیریت زبان‌ها =============
+    function addLanguage() {
+        const name = document.getElementById('languageInput').value.trim();
+        const level = document.getElementById('proficiencyInput').value;
+        if (name) {
+            languages.push({ name, level });
+            document.getElementById('languageInput').value = '';
+            renderLanguages();
+            updatePreview();
+        }
+    }
+    
+    function renderLanguages() {
+        const container = document.getElementById('languagesList');
+        container.innerHTML = languages.map((lang, i) => `
+            <span class="skill-tag">
+                ${lang.name} (${lang.level})
+                <span class="remove-small" onclick="removeLanguage(${i})">✖</span>
+            </span>
+        `).join('');
+    }
+    
+    function removeLanguage(index) {
+        languages.splice(index, 1);
+        renderLanguages();
+        updatePreview();
+    }
+    
+    // ============= مدیریت گواهینامه‌ها =============
+    function addCertification() {
+        const name = document.getElementById('certInput').value.trim();
+        if (name) {
+            certifications.push({ name });
+            document.getElementById('certInput').value = '';
+            renderCertifications();
+            updatePreview();
+        }
+    }
+    
+    function renderCertifications() {
+        const container = document.getElementById('certificationsList');
+        container.innerHTML = certifications.map((cert, i) => `
+            <span class="skill-tag">
+                📜 ${cert.name}${cert.issuer ? ' (' + cert.issuer + ')' : ''}${cert.year ? ' ' + cert.year : ''}
+                <span class="remove-small" onclick="removeCertification(${i})">✖</span>
+            </span>
+        `).join('');
+    }
+    
+    function removeCertification(index) {
+        certifications.splice(index, 1);
+        renderCertifications();
+        updatePreview();
+    }
+    
+    // ============= آپلود و استخراج اطلاعات از PDF =============
+    function handlePdfSelect() {
+        const input = document.getElementById('pdfUpload');
+        const file = input.files[0];
+        if (!file) return;
+
+        document.getElementById('pdfFileName').textContent = file.name;
+        document.getElementById('pdfFileName').style.display = 'block';
+
+        const formData = new FormData();
+        formData.append('pdf_file', file);
+
+        const uploadBtn = document.getElementById('pdfUploadBtn');
+        uploadBtn.textContent = '⏳ Processing...';
+        uploadBtn.disabled = true;
+
+        fetch('/upload_pdf', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            uploadBtn.textContent = '📎 Choose PDF File';
+            uploadBtn.disabled = false;
+
+            if (data.success) {
+                const resumeData = data.data;
+
+                // Pre-fill form fields
+                document.getElementById('fullName').value = resumeData.full_name || '';
+                document.getElementById('jobTitle').value = resumeData.job_title || '';
+                document.getElementById('email').value = resumeData.email || '';
+                document.getElementById('phone').value = resumeData.phone || '';
+                document.getElementById('address').value = resumeData.address || '';
+                document.getElementById('summary').value = resumeData.about || '';
+
+                // Pre-fill experiences
+                experiences = resumeData.experiences || [];
+                renderExperiences();
+
+                // Pre-fill educations
+                educations = resumeData.educations || [];
+                renderEducations();
+
+                // Pre-fill skills
+                skills = resumeData.skills || [];
+                renderSkills();
+
+                // Pre-fill languages
+                languages = resumeData.languages || [];
+                renderLanguages();
+
+                // Pre-fill certifications
+                certifications = resumeData.certifications || [];
+                renderCertifications();
+
+                // Update preview
+                updatePreview();
+
+                alert('✅ Resume information extracted from PDF successfully!');
+            } else {
+                alert('❌ Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            uploadBtn.textContent = '📎 Choose PDF File';
+            uploadBtn.disabled = false;
+            console.error('Error:', error);
+            alert('❌ Error uploading PDF');
+        });
+    }
+
+    // ============= ذخیره رزومه در دیتابیس =============
+    function saveResume() {
+        const fullName = document.getElementById('fullName').value;
+        if (!fullName) {
+            alert('Please enter your Full Name first!');
+            return;
+        }
+        
+        const resumeData = {
+            full_name: fullName,
+            job_title: document.getElementById('jobTitle').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            about: document.getElementById('summary').value,
+            experiences: experiences,
+            educations: educations,
+            skills: skills,
+            languages: languages,
+            certifications: certifications,
+            template: selectedTemplate
+        };
+        
+        fetch('/save_resume_data', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(resumeData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('✅ Resume saved successfully!');
+                window.location.href = '/view_resume/' + data.resume_id;
+            } else {
+                alert('❌ Error: ' + data.error);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('❌ Error saving resume');
+        });
+    }
+    
+    // مقداردهی اولیه
+    updatePreview();
+</script>
+{% endblock %}

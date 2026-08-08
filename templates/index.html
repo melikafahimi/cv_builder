@@ -1,0 +1,446 @@
+{% extends "base.html" %}
+
+{% block title %}Resume Builder Pro - Create Professional Resumes{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero">
+    <div class="hero-left">
+        <h1>Build your professional <span class="highlight">resume</span> in minutes</h1>
+        <p class="subtitle">Create a standout resume with our AI-powered builder. 
+           Used by over 1 million professionals worldwide.</p>
+        
+        <div class="hero-buttons">
+            <a href="{{ url_for('build_resume_with_templates') }}" class="btn-primary">✨ Create Your Resume →</a>
+            {% if not current_user.is_authenticated %}
+                <a href="{{ url_for('login') }}" class="btn-secondary">Login</a>
+            {% endif %}
+        </div>
+        
+        <p class="credit-text">No credit card required · Free to start</p>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number">18M+</div>
+                <div class="stat-label">Resumes created</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">94%</div>
+                <div class="stat-label">Success rate</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">2x</div>
+                <div class="stat-label">More interviews</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="hero-right">
+        <div class="rating-card">
+            <div class="stars">
+                <span>★★★★★</span>
+                <span class="rating-score">4.5/5</span>
+            </div>
+            <p class="rating-text">The Best Online Resume Builder</p>
+            <div class="review-badge">
+                <span>🔥</span> Trusted by professionals
+            </div>
+        </div>
+        
+        <div class="testimonial-card">
+            <div class="quote-icon">"</div>
+            <p class="testimonial-text">
+                Every draft of my resume was phenomenal. Got me hired in 2 weeks!
+            </p>
+            <div class="testimonial-author">
+                <strong>Carlos Craig</strong>
+                <span>React Native Engineer</span>
+            </div>
+        </div>
+        
+        <div class="template-badge">
+            <div class="template-icon">📄</div>
+            <div>
+                <strong>Recruiter-approved Templates</strong>
+                <span>Choose from templates loved by recruiters</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Templates Section -->
+<div class="templates-section">
+    <h2>Recruiter-approved Templates</h2>
+    <p class="section-subtitle">Choose from templates loved by hiring managers at top companies</p>
+    
+    <div class="templates-grid">
+        <a href="{{ url_for('build_resume_with_templates') }}" class="template-card">
+            <img src="/static/classic.jpg" alt="Template">
+        </a>
+        
+        <a href="{{ url_for('build_resume_with_templates') }}" class="template-card">
+            <img src="/static/creative.jpg" alt="Template">
+        </a>
+        
+        <a href="{{ url_for('build_resume_with_templates') }}" class="template-card">
+            <img src="/static/modern.jpg" alt="Template">
+        </a>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="features-section">
+    <div class="feature">
+        <div class="feature-icon">🤖</div>
+        <h3>Better Than ChatGPT</h3>
+        <p>The best resume AI, based on our 15 years of hiring experience</p>
+    </div>
+    <div class="feature">
+        <div class="feature-icon">⚡</div>
+        <h3>Quick & Easy</h3>
+        <p>Fill in your info and get a professional resume in 5 minutes</p>
+    </div>
+    <div class="feature">
+        <div class="feature-icon">📥</div>
+        <h3>Multiple Formats</h3>
+        <p>Download as PDF, DOCX, or share with a link</p>
+    </div>
+    <div class="feature">
+        <div class="feature-icon">🎨</div>
+        <h3>Customizable</h3>
+        <p>Change colors, fonts, and layouts to match your style</p>
+    </div>
+</div>
+
+<style>
+    /* Hero Section */
+    .hero {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 60px;
+        align-items: center;
+        padding: 60px 0;
+    }
+    
+    .hero-left h1 {
+        font-size: 48px;
+        color: #436456;
+        margin-bottom: 20px;
+        line-height: 1.2;
+    }
+    
+    .hero-left .highlight {
+        color: #436456;
+        position: relative;
+        display: inline-block;
+    }
+    
+    .hero-left .highlight::after {
+        content: '';
+        position: absolute;
+        bottom: 5px;
+        left: 0;
+        width: 100%;
+        height: 8px;
+        background: #CCCCCC;
+        opacity: 0.5;
+        z-index: -1;
+    }
+    
+    .subtitle {
+        font-size: 18px;
+        color: #666;
+        margin-bottom: 30px;
+        line-height: 1.5;
+    }
+    
+    .hero-buttons {
+        display: flex;
+        gap: 15px;
+        margin-bottom: 15px;
+        flex-wrap: wrap;
+    }
+    
+    .btn-primary {
+        background: #436456;
+        color: white;
+        padding: 14px 28px;
+        border-radius: 40px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+    
+    .btn-primary:hover {
+        background: #2c3e32;
+        transform: translateY(-2px);
+    }
+    
+    .btn-secondary {
+        background: #CCCCCC;
+        color: #436456;
+        padding: 14px 28px;
+        border-radius: 40px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-block;
+    }
+    
+    .btn-secondary:hover {
+        background: #bbb;
+        transform: translateY(-2px);
+    }
+    
+    .credit-text {
+        font-size: 14px;
+        color: #999;
+        margin-bottom: 30px;
+    }
+    
+    .stats {
+        display: flex;
+        gap: 40px;
+        padding-top: 20px;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .stat-number {
+        font-size: 32px;
+        font-weight: bold;
+        color: #436456;
+    }
+    
+    .stat-label {
+        font-size: 14px;
+        color: #666;
+    }
+    
+    /* Right Side Cards */
+    .rating-card {
+        background: #CCCCCC;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .stars {
+        font-size: 24px;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+    }
+    
+    .rating-score {
+        font-size: 14px;
+        color: #436456;
+        font-weight: bold;
+        margin-left: 10px;
+    }
+    
+    .rating-text {
+        font-weight: 600;
+        color: #436456;
+        margin-bottom: 10px;
+    }
+    
+    .review-badge {
+        background: #436456;
+        color: white;
+        padding: 8px 16px;
+        border-radius: 30px;
+        display: inline-block;
+        font-size: 14px;
+    }
+    
+    .testimonial-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        margin-bottom: 20px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        position: relative;
+    }
+    
+    .quote-icon {
+        font-size: 48px;
+        color: #CCCCCC;
+        font-family: serif;
+        position: absolute;
+        top: 10px;
+        left: 20px;
+        opacity: 0.5;
+    }
+    
+    .testimonial-text {
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333;
+        margin-bottom: 15px;
+        padding-left: 30px;
+    }
+    
+    .testimonial-author strong {
+        display: block;
+        color: #436456;
+    }
+    
+    .testimonial-author span {
+        font-size: 13px;
+        color: #999;
+    }
+    
+    .template-badge {
+        background: #CCCCCC;
+        border-radius: 16px;
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+    
+    .template-icon {
+        font-size: 36px;
+    }
+    
+    .template-badge strong {
+        display: block;
+        color: #436456;
+    }
+    
+    .template-badge span {
+        font-size: 13px;
+        color: #666;
+    }
+    
+    /* Templates Section */
+    .templates-section {
+        text-align: center;
+        padding: 60px 0;
+    }
+    
+    .templates-section h2 {
+        font-size: 36px;
+        color: #436456;
+        margin-bottom: 15px;
+    }
+    
+    .section-subtitle {
+        color: #666;
+        margin-bottom: 40px;
+    }
+    
+    .templates-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+    }
+    
+    .template-card {
+    display: block;
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: transform 0.2s, box-shadow 0.2s;
+    text-decoration: none;
+    cursor: pointer;
+    }
+    
+    
+    .template-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+    
+    .template-card img {
+    width: 100%;
+    max-width: 200px;
+    height: 260px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: 8px;
+    display: block;
+    margin: 0 auto;
+    border: 1px solid #e2e8f0;
+    }
+    
+    .template-card h3 {
+        color: #436456;
+        margin-bottom: 8px;
+    }
+    
+    .template-card p {
+        font-size: 13px;
+        color: #666;
+    }
+    
+    /* Features Section */
+    .features-section {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 30px;
+        padding: 60px 0;
+        border-top: 1px solid #e0e0e0;
+    }
+    
+    .feature {
+        text-align: center;
+    }
+    
+    .feature-icon {
+        font-size: 48px;
+        margin-bottom: 15px;
+    }
+    
+    .feature h3 {
+        color: #436456;
+        margin-bottom: 10px;
+        font-size: 18px;
+    }
+    
+    .feature p {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.5;
+    }
+    
+    /* Responsive */
+@media (max-width: 900px) {
+    .templates-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .template-card img {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 500px) {
+    .templates-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+    
+    @media (max-width: 600px) {
+        .templates-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .features-section {
+            grid-template-columns: 1fr;
+        }
+        
+        .hero-left h1 {
+            font-size: 32px;
+        }
+        
+        .stats {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+</style>
+{% endblock %}

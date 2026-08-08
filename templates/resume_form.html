@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Mintro — Resume Builder</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: #eef2f5;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      padding: 40px 24px;
+      color: #1e2a3e;
+    }
+
+    /* main two-column layout */
+    .builder-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 28px;
+      background: transparent;
+    }
+
+    /* FORM PANEL (LEFT) */
+    .form-panel {
+      background: white;
+      border-radius: 28px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+      padding: 28px 30px;
+      transition: all 0.2s;
+      height: fit-content;
+      max-height: 90vh;
+      overflow-y: auto;
+      scrollbar-width: thin;
+    }
+
+    .form-panel h2 {
+      font-size: 1.7rem;
+      font-weight: 600;
+      letter-spacing: -0.3px;
+      margin-bottom: 8px;
+      color: #0a2942;
+    }
+
+    .form-panel .sub {
+      font-size: 0.9rem;
+      color: #5b6e8c;
+      margin-bottom: 28px;
+      border-left: 3px solid #3b82f6;
+      padding-left: 12px;
+    }
+
+    .form-group {
+      margin-bottom: 22px;
+    }
+
+    label {
+      font-weight: 500;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: #2c3e66;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1.5px solid #e2e8f0;
+      border-radius: 16px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      transition: 0.2s;
+      background: #fefefe;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .row-2cols {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .skill-item, .exp-item, .edu-item {
+      background: #f8fafc;
+      border-radius: 20px;
+      padding: 12px 16px;
+      margin-bottom: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid #eef2ff;
+    }
+
+    .skill-text, .exp-title, .edu-title {
+      flex: 1;
+      font-weight: 500;
+    }
+
+    .remove-btn {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+      color: #94a3b8;
+      transition: 0.2s;
+      padding: 4px 8px;
+      border-radius: 40px;
+    }
+
+    .remove-btn:hover {
+      color: #dc2626;
+      background: #fff0f0;
+    }
+
+    button.add-btn {
+      background: transparent;
+      border: 1.5px dashed #94a3b8;
+      padding: 10px;
+      border-radius: 40px;
+      width: 100%;
+      font-weight: 500;
+      margin-top: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+      color: #1e40af;
+      font-family: inherit;
+    }
+
+    button.add-btn:hover {
+      background: #f1f5f9;
+      border-color: #3b82f6;
+    }
+
+    /* RESUME PANEL (RIGHT) — exactly like the photo */
+    .resume-panel {
+      background: white;
+      border-radius: 28px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.05);
+      padding: 36px 32px;
+      transition: all 0.2s;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    /* resume styling (matches screenshot) */
+    .resume-header h1 {
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: #0f172a;
+      margin-bottom: 12px;
+      border-bottom: 2px solid #e9edf2;
+      padding-bottom: 12px;
+    }
+
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px 20px;
+      background: #f9fafb;
+      padding: 16px 20px;
+      border-radius: 24px;
+      margin: 20px 0;
+      font-size: 0.85rem;
+    }
+
+    .contact-item {
+      display: flex;
+      gap: 6px;
+      color: #2d3a4b;
+    }
+
+    .contact-item strong {
+      font-weight: 600;
+      color: #0f2b3d;
+      min-width: 70px;
+    }
+
+    .resume-summary {
+      margin: 20px 0;
+    }
+
+    .resume-summary h3, .skills-section h3, .experience-section h3, .education-section h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #1e3a5f;
+      margin-bottom: 10px;
+      border-left: 4px solid #3b82f6;
+      padding-left: 12px;
+    }
+
+    .skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin: 12px 0 20px;
+    }
+
+    .skill-badge {
+      background: #eef2ff;
+      padding: 6px 14px;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: #1e3a8a;
+    }
+
+    .exp-entry, .edu-entry {
+      margin-bottom: 20px;
+    }
+
+    .exp-header {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .exp-title {
+      font-weight: 700;
+    }
+
+    .exp-date {
+      color: #4b5563;
+      font-weight: 500;
+    }
+
+    .exp-desc {
+      margin-top: 6px;
+      padding-left: 12px;
+      list-style-type: disc;
+      color: #2c3e50;
+      font-size: 0.85rem;
+    }
+
+    .exp-desc li {
+      margin-bottom: 4px;
+    }
+
+    hr {
+      margin: 14px 0;
+      border: 0;
+      height: 1px;
+      background: #e4e7eb;
+    }
+
+    .empty-resume-msg {
+      color: #a0afc3;
+      text-align: center;
+      padding: 40px 0;
+      font-style: italic;
+    }
+
+    @media (max-width: 900px) {
+      .builder-container {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      body {
+        padding: 20px 16px;
+      }
+      .form-panel, .resume-panel {
+        max-height: unset;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="builder-container">
+  <!-- LEFT: FORM (data input) -->
+  <div class="form-panel">
+    <h2>📄 Mintro · Resume Builder</h2>
+    <div class="sub">Fill the details → realtime preview exactly like the design</div>
+
+    <!-- Basic info -->
+    <div class="form-group">
+      <label>Full Name</label>
+      <input type="text" id="fullName" placeholder="e.g. Laura Müller" value="Laura Müller">
+    </div>
+    <div class="row-2cols">
+      <div class="form-group"><label>Patient Code (optional)</label><input type="text" id="patientCode" placeholder="1010" value="1010"></div>
+      <div class="form-group"><label>Surname</label><input type="text" id="surname" placeholder="Müller" value="Müller"></div>
+    </div>
+    <div class="row-2cols">
+      <div class="form-group"><label>City</label><input type="text" id="city" placeholder="Lausanne" value="Lausanne"></div>
+      <div class="form-group"><label>Country</label><input type="text" id="country" placeholder="Switzerland" value="Switzerland"></div>
+    </div>
+    <div class="row-2cols">
+      <div class="form-group"><label>Phone</label><input type="text" id="phone" value="+41 (077) 444 55 55"></div>
+      <div class="form-group"><label>Email</label><input type="email" id="email" value="l.müller@sample.ch"></div>
+    </div>
+
+    <div class="form-group">
+      <label>Professional Summary</label>
+      <textarea id="summary">Customer and Retail Sales professional with solid understanding of retail dynamics, marketing and customer service. Offering 5 years of experience providing quality product recommendations and solutions to meet customer needs and exceed expectations. Demonstrated record of exceeding revenue targets by leveraging communication skills and sales expertise.</textarea>
+    </div>
+
+    <!-- SKILLS dynamic -->
+    <div class="form-group">
+      <label>Skills (click + to add)</label>
+      <div id="skillsContainer">
+        <div class="skill-item"><span class="skill-text">Inventory management</span><button class="remove-btn" onclick="removeSkill(this)">✕</button></div>
+        <div class="skill-item"><span class="skill-text">Accurate money handling</span><button class="remove-btn" onclick="removeSkill(this)">✕</button></div>
+        <div class="skill-item"><span class="skill-text">Documentation and record keeping</span><button class="remove-btn" onclick="removeSkill(this)">✕</button></div>
+        <div class="skill-item"><span class="skill-text">Retail merchandising expertise</span><button class="remove-btn" onclick="removeSkill(this)">✕</button></div>
+      </div>
+      <button class="add-btn" id="addSkillBtn">+ Add new skill</button>
+    </div>
+
+    <!-- EXPERIENCE dynamic -->
+    <div class="form-group">
+      <label>Work Experience</label>
+      <div id="expContainer">
+        <div class="exp-item">
+          <div style="flex:1"><input type="text" placeholder="Job title" class="exp-job" value="Retail Sales Associate" style="margin-bottom:6px"><input type="text" placeholder="Date (e.g. 02/2017 - Current)" class="exp-date-input" value="02/2017 - Current"><textarea placeholder="Responsibilities (one per line or bullet points)" class="exp-desc-input" rows="2">Increased monthly sales 10% by effectively upselling and cross-selling products to maximize profitability.
+Proven ability to increase sales by leveraging cross-functional expertise.
+Processed payments and maintained accurate records to meet financial targets.</textarea></div>
+          <button class="remove-btn" onclick="removeExp(this)">✕</button>
+        </div>
+        <div class="exp-item">
+          <div style="flex:1"><input type="text" placeholder="Job title" class="exp-job" value="Retail Sales Associate" style="margin-bottom:6px"><input type="text" placeholder="Date" class="exp-date-input" value="08/2015 - 01/2017"><textarea placeholder="Responsibilities" class="exp-desc-input" rows="2">Upsold seasonal items and products, boosting average store sales by 1%.
+Managed inventory and maintained accurate records to meet financial targets.
+Trained new staff on 5 business areas to ensure smooth operation.
+Developed creative and appealing store art techniques.</textarea></div>
+          <button class="remove-btn" onclick="removeExp(this)">✕</button>
+        </div>
+      </div>
+      <button class="add-btn" id="addExpBtn">+ Add work experience</button>
+    </div>
+
+    <!-- EDUCATION -->
+    <div class="form-group">
+      <label>Education & Training</label>
+      <div id="eduContainer">
+        <div class="edu-item">
+          <div style="flex:1"><input type="text" placeholder="Degree / Diploma" class="edu-degree" value="Federal VET Diploma: Retail Business Management" style="margin-bottom:6px"><input type="text" placeholder="Year" class="edu-year" value="2018"><input type="text" placeholder="Institution / location" class="edu-location" value="Sales apprenticeship/Ecole des métiers - Lausanne, Switzerland"></div>
+          <button class="remove-btn" onclick="removeEdu(this)">✕</button>
+        </div>
+      </div>
+      <button class="add-btn" id="addEduBtn">+ Add education</button>
+    </div>
+    <div class="form-group" style="margin-top: 12px;">
+      <small style="color:#5f7f9e;">✨ Resume updates live instantly — matches your screenshot style ✨</small>
+    </div>
+  </div>
+
+  <!-- RIGHT: LIVE RESUME PREVIEW identical to mintro photo -->
+  <div class="resume-panel" id="resumePanel">
+    <!-- dynamic content injected via js -->
+  </div>
+</div>
+
+<script>
+  // Helper: get current data from DOM
+  function updateResume() {
+    // 1) Basic info
+    const fullName = document.getElementById('fullName').value.trim() || "Your Name";
+    const patientCode = document.getElementById('patientCode').value;
+    const surname = document.getElementById('surname').value;
+    const city = document.getElementById('city').value;
+    const country = document.getElementById('country').value;
+    const phone = document.getElementById('phone').value;
+    const email = document.getElementById('email').value;
+    const summary = document.getElementById('summary').value;
+
+    // 2) Skills
+    const skillSpans = document.querySelectorAll('#skillsContainer .skill-text');
+    let skills = [];
+    skillSpans.forEach(span => { if(span.innerText.trim()) skills.push(span.innerText.trim()); });
+
+    // 3) Experience
+    const expItems = document.querySelectorAll('#expContainer .exp-item');
+    let experiences = [];
+    expItems.forEach(item => {
+      const jobInput = item.querySelector('.exp-job');
+      const dateInput = item.querySelector('.exp-date-input');
+      const descTextarea = item.querySelector('.exp-desc-input');
+      if(jobInput && dateInput) {
+        let descLines = [];
+        if(descTextarea) {
+          descLines = descTextarea.value.split(/\r?\n/).filter(line => line.trim() !== "");
+        }
+        experiences.push({
+          title: jobInput.value.trim(),
+          date: dateInput.value.trim(),
+          description: descLines
+        });
+      }
+    });
+
+    // 4) Education
+    const eduItems = document.querySelectorAll('#eduContainer .edu-item');
+    let educations = [];
+    eduItems.forEach(item => {
+      const degree = item.querySelector('.edu-degree');
+      const year = item.querySelector('.edu-year');
+      const location = item.querySelector('.edu-location');
+      if(degree) {
+        educations.push({
+          degree: degree.value.trim(),
+          year: year ? year.value.trim() : "",
+          location: location ? location.value.trim() : ""
+        });
+      }
+    });
+
+    // ----- Render RESUME exactly like the photo: header with patient code etc and contact grid
+    let resumeHTML = `
+      <div class="resume-header">
+        <h1>${escapeHtml(fullName)}</h1>
+        <div class="contact-grid">
+          ${patientCode ? `<div class="contact-item"><strong>Patient Code:</strong> ${escapeHtml(patientCode)}</div>` : ''}
+          ${surname ? `<div class="contact-item"><strong>Surname:</strong> ${escapeHtml(surname)}</div>` : ''}
+          ${city ? `<div class="contact-item"><strong>City:</strong> ${escapeHtml(city)}</div>` : ''}
+          ${country ? `<div class="contact-item"><strong>Country:</strong> ${escapeHtml(country)}</div>` : ''}
+          ${phone ? `<div class="contact-item"><strong>Phone:</strong> ${escapeHtml(phone)}</div>` : ''}
+          ${email ? `<div class="contact-item"><strong>Email:</strong> ${escapeHtml(email)}</div>` : ''}
+        </div>
+      </div>
+    `;
+
+    // SUMMARY
+    if(summary) {
+      resumeHTML += `<div class="resume-summary"><h3>SUMMARY</h3><p style="line-height:1.45; font-size:0.9rem;">${escapeHtml(summary)}</p></div>`;
+    }
+
+    // SKILLS
+    if(skills.length) {
+      resumeHTML += `<div class="skills-section"><h3>SKILLS</h3><div class="skills-list">`;
+      skills.forEach(skill => {
+        resumeHTML += `<span class="skill-badge">${escapeHtml(skill)}</span>`;
+      });
+      resumeHTML += `</div></div>`;
+    }
+
+    // EXPERIENCE
+    if(experiences.length) {
+      resumeHTML += `<div class="experience-section"><h3>EXPERIENCE</h3>`;
+      experiences.forEach(exp => {
+        resumeHTML += `<div class="exp-entry">
+          <div class="exp-header">
+            <span class="exp-title">${escapeHtml(exp.title)}</span>
+            <span class="exp-date">${escapeHtml(exp.date)}</span>
+          </div>
+          <ul class="exp-desc">`;
+        if(exp.description.length) {
+          exp.description.forEach(line => {
+            resumeHTML += `<li>${escapeHtml(line)}</li>`;
+          });
+        } else {
+          resumeHTML += `<li>—</li>`;
+        }
+        resumeHTML += `</ul></div>`;
+      });
+      resumeHTML += `</div>`;
+    }
+
+    // EDUCATION AND TRAINING (exactly as photo style)
+    if(educations.length) {
+      resumeHTML += `<div class="education-section"><h3>EDUCATION AND TRAINING</h3>`;
+      educations.forEach(edu => {
+        resumeHTML += `<div class="edu-entry">
+          <div style="font-weight:700;">${escapeHtml(edu.year)}</div>
+          <div>${escapeHtml(edu.degree)}</div>
+          <div style="color:#2c3e66; font-size:0.85rem;">${escapeHtml(edu.location)}</div>
+        </div>`;
+      });
+      resumeHTML += `</div>`;
+    }
+
+    if(!summary && skills.length===0 && experiences.length===0 && educations.length===0) {
+      resumeHTML += `<div class="empty-resume-msg">✨ Fill the form on the left to build your professional resume ✨</div>`;
+    }
+
+    document.getElementById('resumePanel').innerHTML = resumeHTML;
+  }
+
+  // helper escape
+  function escapeHtml(str) {
+    if(!str) return '';
+    return str.replace(/[&<>]/g, function(m) {
+      if(m === '&') return '&amp;';
+      if(m === '<') return '&lt;';
+      if(m === '>') return '&gt;';
+      return m;
+    }).replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]/g, function(c) {
+      return c;
+    });
+  }
+
+  // dynamic handlers
+  function removeSkill(btn) {
+    const item = btn.closest('.skill-item');
+    if(item) item.remove();
+    updateResume();
+  }
+  function removeExp(btn) {
+    const item = btn.closest('.exp-item');
+    if(item) item.remove();
+    updateResume();
+  }
+  function removeEdu(btn) {
+    const item = btn.closest('.edu-item');
+    if(item) item.remove();
+    updateResume();
+  }
+
+  // add new skill
+  document.getElementById('addSkillBtn').addEventListener('click', () => {
+    const container = document.getElementById('skillsContainer');
+    const newDiv = document.createElement('div');
+    newDiv.className = 'skill-item';
+    newDiv.innerHTML = `<span class="skill-text" contenteditable="true" style="background:#fff; border-bottom:1px dashed #ccc; min-width:120px;">New skill</span><button class="remove-btn" onclick="removeSkill(this)">✕</button>`;
+    container.appendChild(newDiv);
+    const editableSpan = newDiv.querySelector('.skill-text');
+    editableSpan.addEventListener('blur', () => updateResume());
+    editableSpan.addEventListener('input', () => updateResume());
+    updateResume();
+  });
+
+  document.getElementById('addExpBtn').addEventListener('click', () => {
+    const container = document.getElementById('expContainer');
+    const newItem = document.createElement('div');
+    newItem.className = 'exp-item';
+    newItem.innerHTML = `<div style="flex:1">
+      <input type="text" placeholder="Job title" class="exp-job" value="New Role">
+      <input type="text" placeholder="Date (e.g. 01/2020 - 01/2023)" class="exp-date-input" value="2022 - 2024">
+      <textarea placeholder="Responsibilities (each line as bullet point)" class="exp-desc-input" rows="2"></textarea>
+    </div>
+    <button class="remove-btn" onclick="removeExp(this)">✕</button>`;
+    container.appendChild(newItem);
+    addExpEventListeners(newItem);
+    updateResume();
+  });
+
+  document.getElementById('addEduBtn').addEventListener('click', () => {
+    const container = document.getElementById('eduContainer');
+    const newEdu = document.createElement('div');
+    newEdu.className = 'edu-item';
+    newEdu.innerHTML = `<div style="flex:1">
+      <input type="text" placeholder="Degree / Diploma" class="edu-degree" value="New Diploma">
+      <input type="text" placeholder="Year" class="edu-year" value="2023">
+      <input type="text" placeholder="Institution / location" class="edu-location" value="University / City">
+    </div>
+    <button class="remove-btn" onclick="removeEdu(this)">✕</button>`;
+    container.appendChild(newEdu);
+    addEduEventListeners(newEdu);
+    updateResume();
+  });
+
+  function addExpEventListeners(expDiv) {
+    const inputs = expDiv.querySelectorAll('input, textarea');
+    inputs.forEach(inp => inp.addEventListener('input', () => updateResume()));
+  }
+  function addEduEventListeners(eduDiv) {
+    const inputs = eduDiv.querySelectorAll('input');
+    inputs.forEach(inp => inp.addEventListener('input', () => updateResume()));
+  }
+
+  // attach global listeners for all existing inputs & updates
+  function attachGlobalListeners() {
+    const allTexts = document.querySelectorAll('#fullName, #patientCode, #surname, #city, #country, #phone, #email, #summary');
+    allTexts.forEach(el => el.addEventListener('input', () => updateResume()));
+
+    document.querySelectorAll('#skillsContainer .skill-text').forEach(span => {
+      span.addEventListener('blur', () => updateResume());
+      if(span.getAttribute('contenteditable') !== 'true') {
+        // make skills a bit editable? we keep them as text but user can delete and add
+      }
+    });
+
+    // existing experience & edu inputs
+    document.querySelectorAll('#expContainer input, #expContainer textarea').forEach(el => el.addEventListener('input', () => updateResume()));
+    document.querySelectorAll('#eduContainer input').forEach(el => el.addEventListener('input', () => updateResume()));
+  }
+
+  // also after every dynamic add, we recall but initial
+  window.onload = () => {
+    attachGlobalListeners();
+    // make all skill-text non-editable but removable, good.
+    // for additional dynamic skills we'll manage via blur.
+    document.querySelectorAll('#skillsContainer .skill-text').forEach(span => {
+      if(!span.hasAttribute('contenteditable')) {
+        // we keep as fixed text but user can edit through "add skill" and delete.
+        // ensure remove button works
+      }
+    });
+    updateResume();
+  };
+
+  // override mutation for dynamic fields from initial exp/edu
+  setInterval(() => {
+    // just for safety, but only update if needed (cost low)
+    const allExpInputs = document.querySelectorAll('#expContainer input, #expContainer textarea');
+    const allEduInputs = document.querySelectorAll('#eduContainer input');
+    const attachIfNeeded = (el) => {
+      if(!el.hasAttribute('data-listener')) {
+        el.addEventListener('input', () => updateResume());
+        el.setAttribute('data-listener', 'true');
+      }
+    };
+    allExpInputs.forEach(attachIfNeeded);
+    allEduInputs.forEach(attachIfNeeded);
+  }, 500);
+</script>
+</body>
+</html>
